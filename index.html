@@ -105,7 +105,7 @@
     flex-direction: column;
     background: var(--white);
     color: var(--black);
-    padding-top: 0;
+    padding-top: 56px;
     overflow-y: auto;
     height: 100vh;
   }
@@ -601,14 +601,6 @@
 <div id="page-about" class="page">
 
   <!-- Sticky Nav -->
-  <nav class="about-nav">
-    <div class="nav-brand" onclick="showPage('hero')">ABOUT ME</div>
-    <div class="nav-links">
-      <button class="nav-btn" onclick="showPage('hero')">Main Menu</button>
-      <button class="nav-btn" onclick="showPage('projects')">Projects</button>
-      <button class="nav-btn" onclick="showPage('contact')">Contact Me</button>
-    </div>
-  </nav>
 
   <!-- §1 — Hero split -->
   <div class="about-hero">
@@ -916,15 +908,7 @@
 </div>
 
 <!-- ═══════════════ CONTACT (simple) ═══════════════ -->
-<div id="page-contact" class="page" style="flex-direction:column;background:var(--black);color:var(--white);padding-top:0;align-items:center;justify-content:center;">
-  <nav style="position:relative;width:100%;top:auto;left:auto;right:auto;padding:16px 32px;background:var(--black);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;">
-    <div class="nav-brand">CONTACT ME</div>
-    <div class="nav-links">
-      <button class="nav-btn" onclick="showPage('hero')">Main Menu</button>
-      <button class="nav-btn" onclick="showPage('about')">About me</button>
-      <button class="nav-btn" onclick="showPage('projects')">Projects</button>
-    </div>
-  </nav>
+<div id="page-contact" class="page" style="flex-direction:column;background:var(--black);color:var(--white);padding-top:56px;align-items:center;justify-content:center;">
   <div style="flex:1;width:100%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:60px;">
     <!-- Hero canvas — behind content -->
     <div style="position:absolute;top:0;bottom:420px;left:50%;transform:translateX(-50%);width:400px;pointer-events:none;z-index:1;height:550px;">
