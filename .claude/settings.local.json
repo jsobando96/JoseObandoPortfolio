@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(wc -l \"jose-obando-portfolio \\(1\\).html\")"
-    ]
-  }
-}
