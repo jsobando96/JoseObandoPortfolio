@@ -473,8 +473,8 @@
 
     /* Projects */
     body.on-projects { overflow: hidden; }
-    #page-projects { height: 100vh; overflow-y: auto; }
-    .projects-grid { grid-template-columns: 1fr 1fr; }
+    #page-projects { height: 100vh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+    .projects-grid { grid-template-columns: 1fr 1fr; flex: none; }
     .project-card { height: 44vw; }
     .projects-header { padding: 24px 20px 12px; }
     .projects-title { font-size: 2rem; }
@@ -506,7 +506,7 @@
 
     /* Contact */
     #page-contact { justify-content: flex-start !important; }
-    #contact-inner { justify-content: flex-start !important; padding-top: 40px !important; padding-bottom: 50px !important; }
+    #contact-inner { justify-content: flex-end !important; padding-bottom: 100px !important; }
 
     /* Detail — inline grid overrides */
     #cs-hero-split { grid-template-columns: 1fr !important; min-height: auto !important; }
