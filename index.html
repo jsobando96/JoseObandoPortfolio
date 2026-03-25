@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>José Obando — Senior WordPress Developer</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
@@ -421,10 +422,13 @@
       gap: 8px;
     }
     .nav-brand {
-      font-size: .95rem;
+      font-size: clamp(.7rem, 3.5vw, .95rem);
       letter-spacing: 1px;
       text-align: center;
       width: 100%;
+      white-space: nowrap;
+      overflow: visible;
+      max-width: 100%;
     }
     .nav-links {
       width: 100%;
@@ -475,6 +479,16 @@
     .projects-header { padding: 24px 20px 12px; }
     .projects-title { font-size: 2rem; }
     #projects-char { display: none; }
+    .project-name {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      background: rgba(0,0,0,.6);
+      padding: 8px 14px;
+      white-space: nowrap;
+      font-size: 1rem !important;
+    }
 
     /* Detail topbar */
     .detail-topbar { flex-wrap: wrap; }
@@ -520,7 +534,7 @@
 
     /* Nav — hide labels, show icons only */
     .nav-btn { padding: 6px 10px; font-size: .68rem; }
-    .nav-brand { font-size: .85rem; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-brand { font-size: clamp(.65rem, 3vw, .85rem); max-width: 100%; overflow: visible; text-overflow: unset; }
 
     /* Hero */
     .hero-content { padding: 80px 18px 40px; }
@@ -730,123 +744,22 @@
 <div id="page-projects" class="page">
   <div class="projects-grid" id="projects-grid">
     <div class="project-card" data-id="quirch" onclick="openProject('quirch')">
-      <div class="project-bg">
-        <svg width="90%" height="90%" viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="10" y="48" font-family="Arial Black" font-size="42" fill="white" opacity=".9">QUIRCH</text>
-          <text x="14" y="62" font-family="Arial" font-size="11" fill="rgba(255,255,255,.6)">FOODS</text>
-          <!-- Apple -->
-          <ellipse cx="30" cy="98" rx="14" ry="16" fill="#e53e3e" opacity=".85"/>
-          <path d="M30 82 Q34 76 38 78" stroke="#4a7c3f" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <path d="M30 82 Q26 76 22 79" stroke="#4a7c3f" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-          <!-- Carrot -->
-          <path d="M75 80 L68 110" stroke="#ed8936" stroke-width="6" stroke-linecap="round"/>
-          <path d="M75 80 Q78 74 74 72" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M75 80 Q80 75 79 71" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M75 80 Q71 74 70 71" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <!-- Fish -->
-          <ellipse cx="135" cy="96" rx="22" ry="12" fill="white" opacity=".75"/>
-          <path d="M157 96 L170 84 L170 108 Z" fill="white" opacity=".75"/>
-          <circle cx="122" cy="93" r="2" fill="#1a202c"/>
-          <path d="M130 90 Q135 85 140 90" stroke="#a0aec0" stroke-width="1" fill="none"/>
-          <path d="M130 96 Q135 91 140 96" stroke="#a0aec0" stroke-width="1" fill="none"/>
-          <path d="M130 102 Q135 97 140 102" stroke="#a0aec0" stroke-width="1" fill="none"/>
-          <!-- Broccoli -->
-          <rect x="204" y="100" width="5" height="18" fill="#4a7c3f" opacity=".85"/>
-          <circle cx="200" cy="96" r="8" fill="#48bb78" opacity=".85"/>
-          <circle cx="210" cy="94" r="8" fill="#48bb78" opacity=".85"/>
-          <circle cx="206" cy="88" r="8" fill="#38a169" opacity=".85"/>
-        </svg>
-      </div>
+      <div class="project-bg" style="background-image:url('ProjectCards/Quirch.png');background-size:cover;background-position:center;"></div>
       <div class="project-name">QUIRCH FOODS</div>
       <div class="project-hover-text">WordPress Development for International Food Brand — 2018</div>
     </div>
     <div class="project-card" data-id="pilar" onclick="openProject('pilar')">
-      <div class="project-bg">
-        <svg width="80%" height="80%" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Book body -->
-          <rect x="40" y="30" width="120" height="90" rx="3" fill="#9ca3af" opacity=".5" stroke="#9ca3af" stroke-width="1.5"/>
-          <!-- Spine -->
-          <rect x="40" y="30" width="14" height="90" rx="2" fill="#6b7280" opacity=".85"/>
-          <!-- Pages lines -->
-          <line x1="62" y1="50" x2="148" y2="50" stroke="white" stroke-width="1" opacity=".4"/>
-          <line x1="62" y1="62" x2="148" y2="62" stroke="white" stroke-width="1" opacity=".4"/>
-          <line x1="62" y1="74" x2="148" y2="74" stroke="white" stroke-width="1" opacity=".4"/>
-          <line x1="62" y1="86" x2="130" y2="86" stroke="white" stroke-width="1" opacity=".4"/>
-          <!-- Name -->
-          <text x="100" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="white" opacity=".95" font-style="italic">Pilar Velez</text>
-        </svg>
-      </div>
+      <div class="project-bg" style="background-image:url('ProjectCards/PilarVelez.png');background-size:cover;background-position:center;"></div>
       <div class="project-name">PILAR VELEZ</div>
       <div class="project-hover-text">Hispanic Heritage Literature Organization — Publishing Platform</div>
     </div>
     <div class="project-card" data-id="pharma" onclick="openProject('pharma')">
-      <div class="project-bg" style="background:#6b7280;">
-        <svg width="90%" height="90%" viewBox="0 0 240 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="0" y="38" font-family="Arial Black" font-size="34" fill="white">Pharma</text>
-          <text x="0" y="74" font-family="Arial Black" font-size="34" fill="#f59e0b">Brand</text>
-          <!-- Syringe body -->
-          <rect x="60" y="95" width="80" height="10" rx="5" fill="white" opacity=".8"/>
-          <!-- Plunger rod -->
-          <rect x="140" y="97" width="22" height="6" rx="2" fill="#d1d5db" opacity=".9"/>
-          <!-- Plunger handle -->
-          <rect x="160" y="93" width="4" height="14" rx="1" fill="#9ca3af"/>
-          <!-- Needle -->
-          <path d="M60 100 L42 100" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".9"/>
-          <path d="M42 100 L34 100" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
-          <!-- Barrel markings -->
-          <line x1="80" y1="95" x2="80" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
-          <line x1="100" y1="95" x2="100" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
-          <line x1="120" y1="95" x2="120" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
-          <!-- Liquid fill -->
-          <rect x="62" y="97" width="40" height="6" rx="3" fill="#60a5fa" opacity=".6"/>
-        </svg>
-      </div>
+      <div class="project-bg" style="background-image:url('ProjectCards/Pharmabrand.png');background-size:cover;background-position:center;"></div>
       <div class="project-name">PHARMABRAND</div>
       <div class="project-hover-text">Campaign Websites, Medical Code Platforms & Contest Systems</div>
     </div>
     <div class="project-card" data-id="pukllay" onclick="openProject('pukllay')">
-      <div class="project-bg" style="background:#111;border:1px solid #222;">
-        <svg width="90%" height="90%" viewBox="0 0 260 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="0" y="40" font-family="Arial Black" font-size="38" fill="white" opacity=".9">PUKLLAY</text>
-          <text x="0" y="54" font-family="Arial" font-size="12" fill="#888" letter-spacing="6">SPORTS</text>
-          <!-- Bicycle -->
-          <!-- Wheels -->
-          <circle cx="55" cy="115" r="22" stroke="white" stroke-width="2.5" fill="none" opacity=".8"/>
-          <circle cx="115" cy="115" r="22" stroke="white" stroke-width="2.5" fill="none" opacity=".8"/>
-          <!-- Spokes front -->
-          <line x1="115" y1="93" x2="115" y2="137" stroke="white" stroke-width="1" opacity=".4"/>
-          <line x1="93" y1="115" x2="137" y2="115" stroke="white" stroke-width="1" opacity=".4"/>
-          <!-- Spokes rear -->
-          <line x1="55" y1="93" x2="55" y2="137" stroke="white" stroke-width="1" opacity=".4"/>
-          <line x1="33" y1="115" x2="77" y2="115" stroke="white" stroke-width="1" opacity=".4"/>
-          <!-- Frame -->
-          <path d="M55 115 L85 82 L115 115" stroke="white" stroke-width="2" fill="none" opacity=".85"/>
-          <path d="M85 82 L115 115" stroke="white" stroke-width="2" fill="none" opacity=".85"/>
-          <path d="M55 115 L85 115 L85 82" stroke="white" stroke-width="2" fill="none" opacity=".6"/>
-          <!-- Handlebar -->
-          <path d="M115 93 L120 80 L126 82" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity=".85"/>
-          <!-- Seat -->
-          <path d="M80 80 L92 80" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".85"/>
-          <line x1="86" y1="80" x2="86" y2="92" stroke="white" stroke-width="2" opacity=".7"/>
-          <!-- Pedal -->
-          <circle cx="85" cy="108" r="4" stroke="white" stroke-width="1.5" fill="none" opacity=".6"/>
-          <line x1="80" y1="112" x2="90" y2="104" stroke="white" stroke-width="1.5" opacity=".6"/>
-
-          <!-- Runner -->
-          <!-- Head -->
-          <circle cx="195" cy="76" r="8" fill="white" opacity=".85"/>
-          <!-- Body -->
-          <line x1="195" y1="84" x2="193" y2="108" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".85"/>
-          <!-- Left arm forward -->
-          <path d="M193 90 L178 98" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".85"/>
-          <!-- Right arm back -->
-          <path d="M193 90 L206 96" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".85"/>
-          <!-- Left leg back -->
-          <path d="M193 108 L182 125 L176 138" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".85"/>
-          <!-- Right leg forward -->
-          <path d="M193 108 L200 122 L212 130" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".85"/>
-        </svg>
-      </div>
+      <div class="project-bg" style="background-image:url('ProjectCards/Pukllay.png');background-size:cover;background-position:center;"></div>
       <div class="project-name">PUKLLAY</div>
       <div class="project-hover-text">Sports Brand Platform — Custom WordPress Theme</div>
     </div>
