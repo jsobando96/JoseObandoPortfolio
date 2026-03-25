@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>José Obando — Senior WordPress Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f5f0;
+    --gray: #e0ddd6;
+    --accent: #1a1a1a;
+    --gold: #c8a96e;
+    --red: #d42b2b;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    overflow: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px;
+    background: var(--black);
+    transition: opacity .3s;
+  }
+  nav.hidden { opacity: 0; pointer-events: none; }
+  .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--white); letter-spacing: 2px; cursor: pointer; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-btn {
+    background: transparent; border: 1px solid #444; color: var(--white);
+    padding: 8px 20px; font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 500;
+    cursor: pointer; transition: background .2s, border-color .2s; letter-spacing: .5px;
+  }
+  .nav-btn:hover, .nav-btn.active { background: var(--white); color: var(--black); border-color: var(--white); }
+
+  /* ─── PAGES ─── */
+  .page { min-height: 100vh; display: none; position: relative; }
+  .page.active { display: flex; }
+
+  /* ─── HERO ─── */
+  #page-hero {
+    align-items: center;
+    background: var(--gray);
+    overflow: hidden;
+  }
+  .hero-content {
+    flex: 1; padding: 120px 60px 60px;
+    max-width: 580px; position: relative; z-index: 2;
+  }
+  .hero-greeting {
+    font-size: 2rem; font-weight: 300; color: #555;
+    margin-bottom: 4px; letter-spacing: -0.5px;
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    line-height: .95; letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+  .hero-role {
+    font-weight: 700; font-size: .95rem;
+    line-height: 1.7; margin-bottom: 20px;
+  }
+  .hero-desc { font-size: .95rem; color: #555; line-height: 1.7; margin-bottom: 40px; }
+  .hero-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 380px; }
+  .btn-primary {
+    background: var(--black); color: var(--white);
+    border: 2px solid var(--black); padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: .85rem;
+    cursor: pointer; letter-spacing: .5px; transition: all .2s;
+  }
+  .btn-primary:hover { background: transparent; color: var(--black); }
+  .btn-secondary {
+    background: transparent; color: var(--black);
+    border: 2px solid var(--black); padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: .85rem;
+    cursor: pointer; letter-spacing: .5px; transition: all .2s;
+  }
+  .btn-secondary:hover { background: var(--black); color: var(--white); }
+
+  /* Three.js canvas right side */
+  #hero-canvas-wrap {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 55%; z-index: 1;
+  }
+  #hero-canvas { width: 100%; height: 100%; display: block; }
+
+  /* ─── ABOUT ─── */
+  #page-about {
+    flex-direction: column;
+    background: var(--white);
+    color: var(--black);
+    padding-top: 0;
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  /* About nav sticky */
+  .about-nav {
+    position: sticky; top: 0; z-index: 100;
+    width: 100%; padding: 16px 32px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  /* SECTION 1 — Hero split */
+  .about-hero {
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+  .about-left {
+    padding: 70px 60px;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--black); color: var(--white);
+  }
+  .about-label { font-size: .78rem; letter-spacing: 3px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
+  .about-headline {
+    font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 700; line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .about-body { font-size: .92rem; color: #aaa; line-height: 1.8; margin-bottom: 32px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag {
+    border: 1px solid #444; padding: 7px 16px;
+    font-size: .8rem; letter-spacing: .5px; color: #ccc;
+    transition: border-color .2s, color .2s; cursor: default;
+  }
+  .tag:hover { border-color: var(--white); color: var(--white); }
+
+  .about-right {
+    background: #111; position: relative; display: flex; flex-direction: column;
+  }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding: 40px 40px 0; gap: 30px;
+    color: var(--white);
+  }
+  .stat-label { font-size: .8rem; color: #888; margin-bottom: 4px; }
+  .stat-value { font-weight: 700; font-size: 1.05rem; }
+  #about-canvas-wrap { flex: 1; position: relative; min-height: 400px; }
+  #about-canvas { width: 100%; height: 100%; display: block; position: absolute; inset: 0; }
+
+  /* SECTION 2 — Why Hire Me */
+  .about-why {
+    background: var(--white); color: var(--black);
+  }
+  .about-why-top {
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .section-eyebrow { font-size: .78rem; color: #888; margin-bottom: 12px; letter-spacing: 1px; }
+  .section-big-title {
+    font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 900;
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .section-lead { font-size: 1rem; color: #555; line-height: 1.7; max-width: 680px; }
+
+  .about-why-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--black); color: var(--white);
+  }
+  .why-cell {
+    padding: 60px; border-right: 1px solid #222; border-bottom: 1px solid #222;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .why-cell.visible { opacity: 1; transform: translateY(0); }
+  .why-cell:nth-child(even) { border-right: none; }
+  .why-cell h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: 14px; }
+  .why-cell p { font-size: .92rem; color: #aaa; line-height: 1.8; }
+
+  /* SECTION 3 — How I think */
+  .about-think {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--white); color: var(--black);
+    align-items: start;
+  }
+  .think-left {
+    padding: 80px 60px;
+    position: sticky; top: 56px;
+    align-self: start;
+  }
+  .think-left h2 { font-size: clamp(1.8rem, 2.8vw, 2.6rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+  .think-left p { font-size: .95rem; color: #555; line-height: 1.8; }
+  .think-right {
+    background: var(--black); color: var(--white);
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .think-item {
+    padding: 48px 52px; border-bottom: 1px solid #222;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .think-item.visible { opacity: 1; transform: translateY(0); }
+  .think-item h3 { font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+  .think-item p { font-size: .9rem; color: #aaa; line-height: 1.75; }
+
+  /* SECTION 4 — Selected Work CTA */
+  .about-work-cta {
+    background: var(--white); color: var(--black);
+    padding: 80px 60px;
+    border-top: 1px solid #e0e0e0;
+  }
+  .about-work-cta .section-eyebrow { color: #888; }
+  .about-work-cta h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; margin-bottom: 16px; line-height: 1.1; }
+  .about-work-cta p { font-size: .95rem; color: #555; line-height: 1.7; margin-bottom: 32px; max-width: 700px; }
+
+  /* SECTION 5 — What You Can Expect */
+  .about-expect {
+    background: var(--black); color: var(--white);
+    padding: 80px 60px;
+  }
+  .about-expect .section-eyebrow { color: #666; }
+  .about-expect h2 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900;
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .about-expect p { font-size: .95rem; color: #aaa; line-height: 1.75; margin-bottom: 48px; max-width: 800px; }
+  .expect-pillars { display: flex; gap: 60px; flex-wrap: wrap; }
+  .expect-pillar { font-weight: 700; font-size: 1rem; color: var(--white); }
+
+  /* SECTION 6 — Contact */
+  .about-contact {
+    background: var(--white); color: var(--black);
+    padding: 80px 60px;
+  }
+  .about-contact .section-eyebrow { color: #888; }
+  .about-contact h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+  .about-contact p { font-size: .95rem; color: #555; line-height: 1.7; margin-bottom: 40px; }
+  .contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 800px; }
+  .contact-card {
+    background: var(--black); color: var(--white);
+    padding: 28px 32px; cursor: pointer;
+    transition: background .2s; text-decoration: none; display: block;
+  }
+  .contact-card, .contact-card:visited, .contact-card:link { color: var(--white); }
+  .contact-card:hover { background: #222; }
+  .contact-card-label { font-size: .78rem; color: #888; margin-bottom: 6px; letter-spacing: 1px; }
+  .contact-card-value { font-weight: 700; font-size: .95rem; color: #4dd9e8; }
+  .about-footer {
+    background: var(--black);
+    padding: 24px; text-align: center;
+  }
+  .about-footer button {
+    background: none; border: none; color: #4dd9e8;
+    font-size: .95rem; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: opacity .2s;
+  }
+  .about-footer button:hover { opacity: .7; }
+
+  /* ─── PROJECTS ─── */
+  #page-projects {
+    flex-direction: column;
+    padding-top: 70px;
+    background: var(--black);
+    color: var(--white);
+  }
+  .projects-header { padding: 40px 40px 20px; }
+  .projects-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 2px; }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    flex: 1; position: relative;
+  }
+  .project-card {
+    position: relative; cursor: pointer;
+    height: 70vh;
+    transition: flex .4s;
+  }
+  .project-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(0,0,0,.35); z-index: 1;
+    transition: background .3s;
+  }
+  .project-card:hover::before { background: rgba(0,0,0,.1); }
+  .project-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; font-weight: 900;
+    transition: transform .4s;
+  }
+  .project-card:hover .project-bg { transform: scale(1.05); }
+  .project-card[data-id="quirch"] .project-bg { background: #c0392b; }
+  .project-card[data-id="pilar"] .project-bg { background: #8b0000; }
+  .project-card[data-id="pharma"] .project-bg { background: #888; }
+  .project-card[data-id="pukllay"] .project-bg { background: #1a1a1a; border: 1px solid #333; }
+  .project-name {
+    position: absolute; top: 28px; left: 28px; z-index: 2;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px;
+  }
+  .project-logo {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; align-items: center; justify-content: center; padding: 60px 20px;
+  }
+  .project-logo img { max-width: 100%; max-height: 120px; object-fit: contain; filter: brightness(1.1); }
+  .project-hover-text {
+    position: absolute; bottom: 28px; left: 28px; right: 28px; z-index: 2;
+    font-size: .8rem; color: rgba(255,255,255,.7);
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .3s, transform .3s;
+  }
+  .project-card:hover .project-hover-text { opacity: 1; transform: translateY(0); }
+
+  /* character overlay on projects */
+  #projects-char {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100vw; height: 70vh; pointer-events: none; z-index: 10;
+  }
+  #projects-canvas { width: 100%; height: 100%; display: block; }
+
+  /* ─── PROJECT DETAIL ─── */
+  #page-detail {
+    flex-direction: column;
+    padding-top: 0;
+    background: var(--white);
+    color: var(--black);
+  }
+  .detail-topbar {
+    background: var(--black); color: var(--white);
+    display: flex; align-items: center; gap: 0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .detail-back {
+    background: #222; border: none; color: var(--white);
+    padding: 18px 24px; cursor: pointer; font-size: .85rem;
+    display: flex; align-items: center; gap: 8px;
+    border-right: 1px solid #444;
+    transition: background .2s; font-family: 'DM Sans', sans-serif;
+  }
+  .detail-back:hover { background: #333; }
+  .detail-tab {
+    padding: 18px 24px; font-size: .8rem; font-weight: 700;
+    border-right: 1px solid #333; letter-spacing: .5px;
+  }
+  .detail-title { padding: 18px 24px; font-size: .85rem; flex: 1; color: #ccc; }
+  .detail-year { padding: 18px 24px; font-size: .85rem; color: #666; }
+
+  .detail-main-img {
+    width: 100%; height: 65vh; object-fit: cover;
+    background: #ddd; display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: #999;
+  }
+  .detail-main-img-wrap { position: relative; }
+  .detail-char {
+    position: absolute; bottom: -20px; left: 40px;
+    width: 220px; pointer-events: none; z-index: 5;
+  }
+  #detail-canvas { width: 100%; height: 100%; display: block; }
+
+  .detail-thumbs {
+    display: flex; gap: 12px; padding: 20px 40px;
+    overflow-x: auto; background: #f0ede8;
+    border-bottom: 1px solid #ddd;
+  }
+  .thumb {
+    width: 160px; height: 100px; flex-shrink: 0;
+    background: #ddd; border: 2px solid transparent;
+    cursor: pointer; transition: border-color .2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: #aaa;
+  }
+  .thumb.active, .thumb:hover { border-color: var(--black); }
+  .detail-info { padding: 40px; max-width: 800px; }
+  .detail-info h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; margin-bottom: 16px; letter-spacing: 1px; }
+  .detail-info p { color: #555; line-height: 1.8; margin-bottom: 20px; }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .detail-tag {
+    background: var(--black); color: var(--white);
+    padding: 6px 14px; font-size: .78rem; letter-spacing: .5px;
+  }
+
+  /* ─── 3D CHARACTER (CSS fallback) ─── */
+  .char-svg { width: 100%; height: 100%; }
+
+  /* ─── Animations ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .page.active .hero-content > * {
+    animation: fadeUp .6s ease both;
+  }
+  .page.active .hero-greeting { animation-delay: .1s; }
+  .page.active .hero-name     { animation-delay: .2s; }
+  .page.active .hero-role     { animation-delay: .3s; }
+  .page.active .hero-desc     { animation-delay: .4s; }
+  .page.active .hero-btns     { animation-delay: .5s; }
+
+  /* floating bob */
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+
+  /* Tablet — 768px */
+  @media (max-width: 768px) {
+
+    /* Nav */
+    nav { padding: 12px 20px; }
+    .nav-brand { font-size: 1rem; letter-spacing: 1px; }
+    .nav-btn { padding: 7px 12px; font-size: .72rem; }
+
+    /* Hero */
+    #page-hero { flex-direction: column; align-items: flex-start; }
+    .hero-content { padding: 90px 24px 48px; max-width: 100%; }
+    #hero-canvas-wrap { position: absolute; inset: 0; width: 100%; opacity: .12; pointer-events: none; }
+
+    /* About — hero split */
+    .about-hero { grid-template-columns: 1fr; min-height: auto; }
+    .about-left { padding: 60px 24px 40px; }
+    .about-right { min-height: 320px; }
+    .about-stats { padding: 24px 24px 0; gap: 20px; }
+    #about-canvas-wrap { min-height: 260px; }
+
+    /* About — why hire me */
+    .about-why-top { padding: 48px 24px 40px; }
+    .about-why-grid { grid-template-columns: 1fr; }
+    .why-cell { padding: 36px 24px; border-right: none; }
+
+    /* About — how I think */
+    .about-think { grid-template-columns: 1fr; }
+    .think-left { padding: 48px 24px 32px; position: static; }
+    .think-item { padding: 32px 24px; }
+
+    /* About — CTA / expect / contact */
+    .about-work-cta { padding: 48px 24px; }
+    .about-expect { padding: 48px 24px; }
+    .about-expect .expect-pillars { gap: 24px; }
+    .about-contact { padding: 48px 24px; }
+    .contact-cards { grid-template-columns: 1fr; }
+
+    /* About nav */
+    .about-nav { padding: 12px 20px; }
+
+    /* Projects */
+    .projects-grid { grid-template-columns: 1fr 1fr; }
+    .project-card { height: 44vw; }
+    .projects-header { padding: 24px 20px 12px; }
+    .projects-title { font-size: 2rem; }
+    #projects-char { display: none; }
+
+    /* Detail topbar */
+    .detail-topbar { flex-wrap: wrap; }
+    .detail-title { font-size: .75rem; padding: 12px 16px; }
+    .detail-back { padding: 14px 16px; font-size: .8rem; }
+    .detail-tab { padding: 14px 16px; font-size: .72rem; }
+    .detail-year { padding: 14px 16px; }
+
+    /* Detail iframe */
+    #detail-iframe, #iframe-loading { height: 50vw; min-height: 220px; }
+
+    /* Detail info */
+    .detail-info { padding: 28px 20px; }
+    .detail-char { display: none; }
+
+    /* Detail — inline grid overrides */
+    #cs-hero-split { grid-template-columns: 1fr !important; min-height: auto !important; }
+    #cs-hero-left  { padding: 40px 24px !important; }
+    #cs-hero-right { padding: 32px 24px !important; }
+    #cs-cst        { grid-template-columns: 1fr !important; padding: 40px 24px !important; gap: 32px !important; }
+    #cs-role-grid  { grid-template-columns: 1fr !important; }
+    #cs-sites      { grid-template-columns: 1fr !important; }
+    #cs-section-overview,
+    #cs-section-role,
+    #cs-section-sites,
+    #cs-section-outcome { padding: 40px 24px 0 !important; }
+    #detail-thumbs { padding: 12px 16px !important; justify-content: flex-start !important; }
+  }
+
+  /* Phone — 480px */
+  @media (max-width: 480px) {
+
+    /* Nav — hide labels, show icons only */
+    .nav-btn { padding: 6px 10px; font-size: .68rem; }
+    .nav-brand { font-size: .85rem; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Hero */
+    .hero-content { padding: 80px 18px 40px; }
+    .hero-greeting { font-size: 1.5rem; }
+    .hero-btns { grid-template-columns: 1fr; max-width: 100%; }
+
+    /* Projects — single column on small phones */
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card { height: 52vw; }
+
+    /* About stats — single column */
+    .about-stats { grid-template-columns: 1fr; }
+
+    /* Contact page hero text */
+    #page-contact h2 { font-size: clamp(2.2rem, 10vw, 4rem) !important; }
+
+    /* Detail topbar — hide non-essential tabs */
+    .detail-tab { display: none; }
+    .detail-year { display: none; }
+    .detail-title { font-size: .72rem; }
+
+    /* Detail iframe */
+    #detail-iframe, #iframe-loading { height: 56vw; min-height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav" class="hidden">
+  <div class="nav-brand" onclick="showPage('hero')">José Obando - Wordpress Developer</div>
+  <div class="nav-links">
+    <button class="nav-btn" id="nav-main"    onclick="showPage('hero')">Main Menu</button>
+    <button class="nav-btn" id="nav-about"   onclick="showPage('about')">About Me</button>
+    <button class="nav-btn" id="nav-projects"onclick="showPage('projects')">Projects</button>
+    <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">Contact Me</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div id="page-hero" class="page active">
+  <div class="hero-content">
+    <p class="hero-greeting">Hello, i am</p>
+    <h1 class="hero-name">José Obando</h1>
+    <div class="hero-role">
+      Senior WordPress Developer<br>
+      Custom Themes, Plugins, ACF, WooCommerce,<br>
+      Responsive Marketing Sites
+    </div>
+    <p class="hero-desc">I build fast, scalable, editor-friendly WordPress websites<br>for brands, publishers, and marketing teams.</p>
+    <div class="hero-btns">
+      <button class="btn-primary"    onclick="showPage('about')">About me</button>
+      <button class="btn-secondary"  onclick="showPage('projects')">View projects</button>
+      <button class="btn-secondary"  onclick="showPage('contact')">Contact me</button>
+      <a href="Docs/Jose_Obando_2026_March.pdf" target="_blank" class="btn-primary" style="text-decoration:none;">Download Resume</a>
+    </div>
+  </div>
+  <div id="hero-canvas-wrap">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+</div>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<div id="page-about" class="page">
+
+  <!-- Sticky Nav -->
+  <nav class="about-nav">
+    <div class="nav-brand" onclick="showPage('hero')">ABOUT ME</div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="showPage('hero')">Main Menu</button>
+      <button class="nav-btn" onclick="showPage('projects')">Projects</button>
+      <button class="nav-btn" onclick="showPage('contact')">Contact Me</button>
+    </div>
+  </nav>
+
+  <!-- §1 — Hero split -->
+  <div class="about-hero">
+    <div class="about-left">
+      <div class="about-label">About Me</div>
+      <h2 class="about-headline">I build custom WordPress websites that look sharp, scale well, and make life easier for marketing teams.</h2>
+      <p class="about-body">I'm Jose Obando, a Senior WordPress Developer based in Quito, Ecuador. I specialize in custom themes, plugins, ACF-driven content systems, WooCommerce workflows, and responsive marketing websites built for real-world business needs.</p>
+      <div class="tags">
+        <span class="tag">Custom WordPress Themes</span>
+        <span class="tag">Custom Plugins</span>
+        <span class="tag">ACF Pro Content Systems</span>
+        <span class="tag">WooCommerce Custom Logic</span>
+        <span class="tag">Performance Optimization</span>
+        <span class="tag">REST API / Headless</span>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-stats">
+        <div><div class="stat-label">Experience</div><div class="stat-value">7+ Years</div></div>
+        <div><div class="stat-label">Websites built</div><div class="stat-value">20+</div></div>
+        <div><div class="stat-label">English</div><div class="stat-value">IELTS 7.0 – C1</div></div>
+        <div><div class="stat-label">Focus</div><div class="stat-value">WordPress Custom Development</div></div>
+      </div>
+      <div id="about-canvas-wrap">
+        <canvas id="about-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- §2 — Why Hire Me -->
+  <div class="about-why">
+    <div class="about-why-top">
+      <div class="section-eyebrow">Why Hire Me</div>
+      <h2 class="section-big-title">I combine technical depth with marketing-friendly execution.</h2>
+      <p class="section-lead">The goal is not just to build a website. The goal is to build something that works well, is easy to manage, and supports the business after launch.</p>
+    </div>
+    <div class="about-why-grid">
+      <div class="why-cell scroll-reveal">
+        <h3>7+ years building with WordPress</h3>
+        <p>I have spent the last several years building custom WordPress solutions for publishers, brands, pharmaceutical campaigns, and business websites.</p>
+      </div>
+      <div class="why-cell scroll-reveal" style="transition-delay:.1s">
+        <h3>20+ websites delivered</h3>
+        <p>From content-heavy publishing platforms to promotional landing pages and custom WooCommerce workflows, I focus on shipping practical and scalable solutions.</p>
+      </div>
+      <div class="why-cell scroll-reveal" style="transition-delay:.2s">
+        <h3>Trusted by international brands</h3>
+        <p>I have spent the last several years building custom WordPress solutions for publishers, brands, pharmaceutical campaigns, and business websites.</p>
+      </div>
+      <div class="why-cell scroll-reveal" style="transition-delay:.3s">
+        <h3>Built for marketing teams</h3>
+        <p>I design editor-friendly systems so non-technical teams can update pages, launch content, and manage campaigns without depending on a developer for every change.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §3 — How I Think -->
+  <div class="about-think">
+    <div class="think-left">
+      <h2>How I think about WordPress projects</h2>
+      <p>I like systems that are flexible for the client, clean for the developer, and strong enough to grow without becoming a maintenance nightmare.</p>
+    </div>
+    <div class="think-right">
+      <div class="think-item scroll-reveal">
+        <h3>I build for real business use</h3>
+        <p>I do not like bloated builds filled with features no one will use. I prefer clean structures, practical admin flows, and websites that are easy to maintain over time.</p>
+      </div>
+      <div class="think-item scroll-reveal" style="transition-delay:.1s">
+        <h3>I care about speed and clarity</h3>
+        <p>Whether I am building a brand page, a plugin, or a campaign site, I focus on responsive layouts, clear content hierarchy, and solid performance foundations.</p>
+      </div>
+      <div class="think-item scroll-reveal" style="transition-delay:.2s">
+        <h3>I can work independently</h3>
+        <p>I have worked as the sole developer on multiple projects, handling architecture, implementation, updates, migrations, fixes, and optimization from start to finish.</p>
+      </div>
+      <div class="think-item scroll-reveal" style="transition-delay:.3s">
+        <h3>I make WordPress easier to use</h3>
+        <p>A big part of my work is turning WordPress into a tool that marketing and design teams can actually use comfortably without fighting the backend every day.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §4 — Selected Work CTA -->
+  <div class="about-work-cta">
+    <div class="section-eyebrow">Selected Work</div>
+    <h2>A few projects that represent how I solve problems</h2>
+    <p>My portfolio includes publishing platforms, international brand websites, custom WooCommerce systems, and pharmaceutical campaign platforms.</p>
+    <button class="btn-primary" style="min-width:200px;font-size:.95rem;" onclick="showPage('projects')">Go to projects</button>
+  </div>
+
+  <!-- §5 — What You Can Expect -->
+  <div class="about-expect">
+    <div class="section-eyebrow">What You Can Expect</div>
+    <h2>Clean execution, practical solutions, and a developer who understands business needs.</h2>
+    <p>I work best with teams that want more than just a pretty website. I help build WordPress systems that support publishing, campaigns, marketing updates, and custom workflows without unnecessary complexity.</p>
+    <div class="expect-pillars">
+      <span class="expect-pillar">Reliable</span>
+      <span class="expect-pillar">Scalable</span>
+      <span class="expect-pillar">Editor-Friendly</span>
+      <span class="expect-pillar">Custom-Built</span>
+    </div>
+  </div>
+
+  <!-- §6 — Contact -->
+  <div class="about-contact">
+    <div class="section-eyebrow">Contact</div>
+    <h2>Need a WordPress developer who can actually build custom solutions?</h2>
+    <p>I'm available for remote opportunities, freelance projects, and long-term collaborations. (Click to send a message)</p>
+    <div class="contact-cards">
+      <a class="contact-card" href="mailto:jsobando96@gmail.com">
+        <div class="contact-card-label">Email</div>
+        <div class="contact-card-value">jsobando96@gmail.com</div>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/joseobando" target="_blank">
+        <div class="contact-card-label">LinkedIn</div>
+        <div class="contact-card-value">linkedin.com/in/joseobando</div>
+      </a>
+      <a class="contact-card" href="https://github.com/jsobando96" target="_blank">
+        <div class="contact-card-label">GitHub</div>
+        <div class="contact-card-value">github.com/jsobando96</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="about-footer">
+    <button onclick="showPage('hero')">&#8592; Return</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<div id="page-projects" class="page">
+  <div class="projects-grid" id="projects-grid">
+    <div class="project-card" data-id="quirch" onclick="openProject('quirch')">
+      <div class="project-bg">
+        <svg width="90%" height="90%" viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="10" y="48" font-family="Arial Black" font-size="42" fill="white" opacity=".9">QUIRCH</text>
+          <text x="14" y="62" font-family="Arial" font-size="11" fill="rgba(255,255,255,.6)">FOODS</text>
+          <!-- Apple -->
+          <ellipse cx="30" cy="98" rx="14" ry="16" fill="#e53e3e" opacity=".85"/>
+          <path d="M30 82 Q34 76 38 78" stroke="#4a7c3f" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M30 82 Q26 76 22 79" stroke="#4a7c3f" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- Carrot -->
+          <path d="M75 80 L68 110" stroke="#ed8936" stroke-width="6" stroke-linecap="round"/>
+          <path d="M75 80 Q78 74 74 72" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M75 80 Q80 75 79 71" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M75 80 Q71 74 70 71" stroke="#4a7c3f" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Fish -->
+          <ellipse cx="135" cy="96" rx="22" ry="12" fill="white" opacity=".75"/>
+          <path d="M157 96 L170 84 L170 108 Z" fill="white" opacity=".75"/>
+          <circle cx="122" cy="93" r="2" fill="#1a202c"/>
+          <path d="M130 90 Q135 85 140 90" stroke="#a0aec0" stroke-width="1" fill="none"/>
+          <path d="M130 96 Q135 91 140 96" stroke="#a0aec0" stroke-width="1" fill="none"/>
+          <path d="M130 102 Q135 97 140 102" stroke="#a0aec0" stroke-width="1" fill="none"/>
+          <!-- Broccoli -->
+          <rect x="204" y="100" width="5" height="18" fill="#4a7c3f" opacity=".85"/>
+          <circle cx="200" cy="96" r="8" fill="#48bb78" opacity=".85"/>
+          <circle cx="210" cy="94" r="8" fill="#48bb78" opacity=".85"/>
+          <circle cx="206" cy="88" r="8" fill="#38a169" opacity=".85"/>
+        </svg>
+      </div>
+      <div class="project-name">QUIRCH FOODS</div>
+      <div class="project-hover-text">WordPress Development for International Food Brand — 2018</div>
+    </div>
+    <div class="project-card" data-id="pilar" onclick="openProject('pilar')">
+      <div class="project-bg">
+        <svg width="80%" height="80%" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Book body -->
+          <rect x="40" y="30" width="120" height="90" rx="3" fill="#9ca3af" opacity=".5" stroke="#9ca3af" stroke-width="1.5"/>
+          <!-- Spine -->
+          <rect x="40" y="30" width="14" height="90" rx="2" fill="#6b7280" opacity=".85"/>
+          <!-- Pages lines -->
+          <line x1="62" y1="50" x2="148" y2="50" stroke="white" stroke-width="1" opacity=".4"/>
+          <line x1="62" y1="62" x2="148" y2="62" stroke="white" stroke-width="1" opacity=".4"/>
+          <line x1="62" y1="74" x2="148" y2="74" stroke="white" stroke-width="1" opacity=".4"/>
+          <line x1="62" y1="86" x2="130" y2="86" stroke="white" stroke-width="1" opacity=".4"/>
+          <!-- Name -->
+          <text x="100" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="white" opacity=".95" font-style="italic">Pilar Velez</text>
+        </svg>
+      </div>
+      <div class="project-name">PILAR VELEZ</div>
+      <div class="project-hover-text">Hispanic Heritage Literature Organization — Publishing Platform</div>
+    </div>
+    <div class="project-card" data-id="pharma" onclick="openProject('pharma')">
+      <div class="project-bg" style="background:#6b7280;">
+        <svg width="90%" height="90%" viewBox="0 0 240 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="38" font-family="Arial Black" font-size="34" fill="white">Pharma</text>
+          <text x="0" y="74" font-family="Arial Black" font-size="34" fill="#f59e0b">Brand</text>
+          <!-- Syringe body -->
+          <rect x="60" y="95" width="80" height="10" rx="5" fill="white" opacity=".8"/>
+          <!-- Plunger rod -->
+          <rect x="140" y="97" width="22" height="6" rx="2" fill="#d1d5db" opacity=".9"/>
+          <!-- Plunger handle -->
+          <rect x="160" y="93" width="4" height="14" rx="1" fill="#9ca3af"/>
+          <!-- Needle -->
+          <path d="M60 100 L42 100" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+          <path d="M42 100 L34 100" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+          <!-- Barrel markings -->
+          <line x1="80" y1="95" x2="80" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
+          <line x1="100" y1="95" x2="100" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
+          <line x1="120" y1="95" x2="120" y2="105" stroke="#6b7280" stroke-width="1" opacity=".5"/>
+          <!-- Liquid fill -->
+          <rect x="62" y="97" width="40" height="6" rx="3" fill="#60a5fa" opacity=".6"/>
+        </svg>
+      </div>
+      <div class="project-name">PHARMABRAND</div>
+      <div class="project-hover-text">Campaign Websites, Medical Code Platforms & Contest Systems</div>
+    </div>
+    <div class="project-card" data-id="pukllay" onclick="openProject('pukllay')">
+      <div class="project-bg" style="background:#111;border:1px solid #222;">
+        <svg width="90%" height="90%" viewBox="0 0 260 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="40" font-family="Arial Black" font-size="38" fill="white" opacity=".9">PUKLLAY</text>
+          <text x="0" y="54" font-family="Arial" font-size="12" fill="#888" letter-spacing="6">SPORTS</text>
+          <!-- Bicycle -->
+          <!-- Wheels -->
+          <circle cx="55" cy="115" r="22" stroke="white" stroke-width="2.5" fill="none" opacity=".8"/>
+          <circle cx="115" cy="115" r="22" stroke="white" stroke-width="2.5" fill="none" opacity=".8"/>
+          <!-- Spokes front -->
+          <line x1="115" y1="93" x2="115" y2="137" stroke="white" stroke-width="1" opacity=".4"/>
+          <line x1="93" y1="115" x2="137" y2="115" stroke="white" stroke-width="1" opacity=".4"/>
+          <!-- Spokes rear -->
+          <line x1="55" y1="93" x2="55" y2="137" stroke="white" stroke-width="1" opacity=".4"/>
+          <line x1="33" y1="115" x2="77" y2="115" stroke="white" stroke-width="1" opacity=".4"/>
+          <!-- Frame -->
+          <path d="M55 115 L85 82 L115 115" stroke="white" stroke-width="2" fill="none" opacity=".85"/>
+          <path d="M85 82 L115 115" stroke="white" stroke-width="2" fill="none" opacity=".85"/>
+          <path d="M55 115 L85 115 L85 82" stroke="white" stroke-width="2" fill="none" opacity=".6"/>
+          <!-- Handlebar -->
+          <path d="M115 93 L120 80 L126 82" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity=".85"/>
+          <!-- Seat -->
+          <path d="M80 80 L92 80" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+          <line x1="86" y1="80" x2="86" y2="92" stroke="white" stroke-width="2" opacity=".7"/>
+          <!-- Pedal -->
+          <circle cx="85" cy="108" r="4" stroke="white" stroke-width="1.5" fill="none" opacity=".6"/>
+          <line x1="80" y1="112" x2="90" y2="104" stroke="white" stroke-width="1.5" opacity=".6"/>
+
+          <!-- Runner -->
+          <!-- Head -->
+          <circle cx="195" cy="76" r="8" fill="white" opacity=".85"/>
+          <!-- Body -->
+          <line x1="195" y1="84" x2="193" y2="108" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+          <!-- Left arm forward -->
+          <path d="M193 90 L178 98" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".85"/>
+          <!-- Right arm back -->
+          <path d="M193 90 L206 96" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".85"/>
+          <!-- Left leg back -->
+          <path d="M193 108 L182 125 L176 138" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".85"/>
+          <!-- Right leg forward -->
+          <path d="M193 108 L200 122 L212 130" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".85"/>
+        </svg>
+      </div>
+      <div class="project-name">PUKLLAY</div>
+      <div class="project-hover-text">Sports Brand Platform — Custom WordPress Theme</div>
+    </div>
+    <!-- Character canvas floating in center -->
+    <div id="projects-char" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:280px;height:400px;pointer-events:none;z-index:10;">
+      <canvas id="projects-canvas" style="width:100%;height:100%;display:block;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PROJECT DETAIL ═══════════════ -->
+<div id="page-detail" class="page" style="flex-direction:column;overflow-y:auto;height:100vh;background:var(--white);">
+
+  <!-- Sticky topbar -->
+  <div class="detail-topbar" style="position:sticky;top:0;z-index:100;background:var(--black);color:var(--white);display:flex;align-items:center;">
+    <button class="detail-back" onclick="showPage('projects')">&#8592; Return</button>
+    <div class="detail-tab">Project detail</div>
+    <div class="detail-title" id="detail-title-bar">Quirch Foods — WordPress Development for International Food Brand</div>
+    <div class="detail-year" id="detail-year-bar">2018</div>
+  </div>
+
+  <!-- §1 — Hero split: title + quick facts -->
+  <div id="cs-hero-split" style="display:grid;grid-template-columns:1fr 1fr;min-height:60vh;">
+    <!-- Left: dark -->
+    <div id="cs-hero-left" style="background:var(--black);color:var(--white);padding:60px 56px;display:flex;flex-direction:column;justify-content:space-between;">
+      <div>
+        <div id="cs-eyebrow" style="font-size:.78rem;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Case Study</div>
+        <h1 id="cs-title" style="font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:32px;">Quirch Foods — WordPress Development for International Food Brand Websites</h1>
+      </div>
+      <p id="cs-subtitle" style="font-size:.92rem;color:#aaa;line-height:1.75;">Multi-site support, responsive page development, usability improvements, SEO-conscious structure, and long-term WordPress maintenance.</p>
+    </div>
+    <!-- Right: light -->
+    <div id="cs-hero-right" style="background:var(--white);padding:60px 56px;">
+      <div style="font-size:.78rem;color:#888;letter-spacing:2px;margin-bottom:28px;">Quick Facts</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:48px;">
+        <div><div style="font-size:.82rem;color:#888;margin-bottom:4px;">Client</div><div style="font-weight:700;" id="cs-client">Quirch Foods</div></div>
+        <div><div style="font-size:.82rem;color:#888;margin-bottom:4px;">Industry</div><div style="font-weight:700;" id="cs-industry">Food &amp; Consumer Brands</div></div>
+        <div><div style="font-size:.82rem;color:#888;margin-bottom:4px;">Role</div><div style="font-weight:700;" id="cs-role">WordPress Developer</div></div>
+        <div><div style="font-size:.82rem;color:#888;margin-bottom:4px;">Duration</div><div style="font-weight:700;" id="cs-duration">4 years</div></div>
+      </div>
+      <div style="font-size:.78rem;color:#888;letter-spacing:2px;margin-bottom:16px;">Services</div>
+      <div id="cs-services" style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">WordPress Development</span>
+        <span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">Maintenance</span>
+        <span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">SEO Improvements</span>
+        <span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">Responsive UI</span>
+        <span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">Optimization</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- §2 — iframe viewer -->
+  <div style="background:#111;position:relative;">
+    <div id="iframe-loading" style="position:absolute;inset:0;height:70vh;display:flex;align-items:center;justify-content:center;background:#111;z-index:5;pointer-events:none;">
+      <span style="color:#888;font-size:.85rem;letter-spacing:3px;text-transform:uppercase;">Loading...</span>
+    </div>
+    <iframe id="detail-iframe" src="about:blank" style="width:100%;height:70vh;border:none;display:block;" allow="fullscreen"></iframe>
+    <div class="detail-char" style="position:absolute;bottom:-10px;left:40px;width:220px;height:380px;pointer-events:none;z-index:10;">
+      <canvas id="detail-canvas" style="width:100%;height:100%;display:block;"></canvas>
+    </div>
+    <div id="detail-thumbs" style="display:flex;gap:10px;padding:16px 40px 16px 40px;overflow-x:auto;border-top:1px solid #333;background:#111;    align-items: center;
+    justify-content: center;"></div>
+  </div>
+
+  <!-- §3 — Overview -->
+  <div id="cs-section-overview" style="padding:64px 60px 0;background:var(--white);">
+    <h2 style="font-size:clamp(2rem,3vw,2.8rem);font-weight:900;margin-bottom:16px;">Overview</h2>
+    <p id="cs-overview" style="font-size:.95rem;color:#444;line-height:1.8;max-width:900px;">Over a four-year period, I worked on multiple WordPress websites for Quirch Foods, a U.S.-based food company, supporting brand pages, website improvements, performance optimization, and ongoing maintenance across several digital properties.</p>
+  </div>
+
+  <!-- §4 — Challenge / Solution / Tech -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--black);color:var(--white);margin-top:48px;padding:56px 60px;gap:48px;" id="cs-cst">
+    <div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:16px;">The Challenge</h3>
+      <p id="cs-challenge" style="font-size:.9rem;color:#aaa;line-height:1.8;">Quirch Foods needed visually strong, easy-to-manage brand websites that could support product communication, marketing content, and ongoing business updates across multiple properties.</p>
+    </div>
+    <div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:16px;">The Solution</h3>
+      <p id="cs-solution" style="font-size:.9rem;color:#aaa;line-height:1.8;">I developed and maintained WordPress-based brand websites, creating responsive pages, implementing content updates, improving structure and usability, and optimizing selected properties for a better front-end experience.</p>
+    </div>
+    <div>
+      <h3 style="font-weight:700;font-size:1rem;margin-bottom:16px;">Tech Stack</h3>
+      <div id="cs-tech" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">WordPress</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">PHP</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">HTML5</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">CSS3</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">JavaScript</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">MySQL</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">ACF</span>
+        <span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">RevSlider</span>
+      </div>
+      <div style="font-size:.78rem;color:#888;margin-bottom:8px;">Why This Project Matters</div>
+      <p id="cs-why" style="font-size:.85rem;color:#aaa;line-height:1.75;">This project demonstrates the ability to support international clients, manage multiple related web properties, and deliver WordPress solutions that balance branding, usability, maintenance, and marketing needs.</p>
+    </div>
+  </div>
+
+  <!-- §5 — My Role -->
+  <div id="cs-section-role" style="padding:64px 60px 0;background:var(--white);">
+    <h2 style="font-size:clamp(1.8rem,2.8vw,2.4rem);font-weight:900;margin-bottom:32px;">My Role</h2>
+    <div id="cs-role-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#e0e0e0;border:2px solid #e0e0e0;">
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Built and updated WordPress pages for consumer-facing food brands</div>
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Supported responsive front-end development and visual refinement</div>
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Improved usability, navigation, and content presentation</div>
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Optimized selected pages for performance and SEO foundations</div>
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Provided long-term maintenance, updates, and fixes</div>
+      <div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">Translated brand requirements into practical WordPress solutions</div>
+    </div>
+  </div>
+
+  <!-- §6 — Websites Included -->
+  <div id="cs-section-sites" style="padding:64px 60px 0;background:var(--white);">
+    <h2 style="font-size:clamp(1.8rem,2.8vw,2.4rem);font-weight:900;margin-bottom:6px;">Websites Included</h2>
+    <p style="font-size:.85rem;color:#888;margin-bottom:28px;">(Click to open)</p>
+    <div id="cs-sites" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#e0e0e0;border:2px solid #e0e0e0;">
+      <a href="https://mambofoods.com" target="_blank" style="background:var(--black);color:var(--white);padding:36px 40px;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='var(--black)'">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:12px;">mambofoods.com</div>
+        <div style="font-size:.88rem;color:#aaa;line-height:1.7;">Branded WordPress pages focused on visual presentation and easy content navigation.</div>
+      </a>
+      <a href="https://quirch.com/chiquita" target="_blank" style="background:var(--black);color:var(--white);padding:36px 40px;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='var(--black)'">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:12px;">quirch.com/chiquita</div>
+        <div style="font-size:.88rem;color:#aaa;line-height:1.7;">Brand-specific pages aligned with product marketing and visual consistency.</div>
+      </a>
+      <a href="https://panamei.com" target="_blank" style="background:var(--black);color:var(--white);padding:36px 40px;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='var(--black)'">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:12px;">panamei.com</div>
+        <div style="font-size:.88rem;color:#aaa;line-height:1.7;">Structure, front-end presentation, and usability improvements.</div>
+      </a>
+      <a href="https://quirchfoods.com" target="_blank" style="background:var(--black);color:var(--white);padding:36px 40px;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='var(--black)'">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:12px;">quirchfoods.com</div>
+        <div style="font-size:.88rem;color:#aaa;line-height:1.7;">Ongoing updates and maintenance across the company's main digital presence.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- §7 — Outcome -->
+  <div id="cs-section-outcome" style="padding:64px 60px 0;background:var(--white);position:relative;">
+    <h2 style="font-size:clamp(1.8rem,2.8vw,2.4rem);font-weight:900;margin-bottom:20px;">Outcome</h2>
+    <div id="cs-outcome" style="font-size:.95rem;color:#444;line-height:2.1;max-width:900px;">
+      <div style="display:flex;gap:12px;margin-bottom:4px;"><span style="color:#888;flex-shrink:0;">—</span><span>Delivered responsive, marketing-focused websites aligned with international food brand communication.</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:4px;"><span style="color:#888;flex-shrink:0;">—</span><span>Improved usability and front-end clarity across multiple pages and properties.</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:4px;"><span style="color:#888;flex-shrink:0;">—</span><span>Supported long-term reliability through continuous maintenance and updates.</span></div>
+      <div style="display:flex;gap:12px;"><span style="color:#888;flex-shrink:0;">—</span><span>Built pages designed to be easy to navigate, marketing-friendly, and SEO-conscious.</span></div>
+    </div>
+    <div style="position:absolute;bottom:0;right:60px;width:260px;height:320px;pointer-events:none;">
+      <canvas id="outcome-canvas" style="width:100%;height:100%;display:block;"></canvas>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:var(--black);margin-top:64px;padding:24px;text-align:center;">
+    <button onclick="showPage('projects')" style="background:none;border:none;color:#4dd9e8;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:8px;">&#8592; Return</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════ CONTACT (simple) ═══════════════ -->
+<div id="page-contact" class="page" style="flex-direction:column;background:var(--black);color:var(--white);padding-top:0;align-items:center;justify-content:center;">
+  <nav style="position:relative;width:100%;top:auto;left:auto;right:auto;padding:16px 32px;background:var(--black);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;">
+    <div class="nav-brand">CONTACT ME</div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="showPage('hero')">Main Menu</button>
+      <button class="nav-btn" onclick="showPage('about')">About me</button>
+      <button class="nav-btn" onclick="showPage('projects')">Projects</button>
+    </div>
+  </nav>
+  <div style="flex:1;width:100%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:60px;">
+    <!-- Hero canvas — behind content -->
+    <div style="position:absolute;top:0;bottom:420px;left:50%;transform:translateX(-50%);width:400px;pointer-events:none;z-index:1;height:550px;">
+      <canvas id="contact-canvas" style="width:100%;height:100%;display:block;"></canvas>
+    </div>
+    <!-- Get In Touch — on top of hero -->
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
+      <p style="color:#888;font-size:.9rem;letter-spacing:3px;text-transform:uppercase;">Let's work together</p>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,6rem);letter-spacing:2px;">Get In Touch</h2>
+      <a href="mailto:jsobando96@gmail.com" style="color:var(--gold);font-size:1.1rem;text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:4px;">jsobando96@gmail.com</a>
+      <div style="display:flex;gap:16px;">
+        <a href="https://www.linkedin.com/in/joseobando" target="_blank"><button class="btn-primary" style="min-width:160px;">LinkedIn</button></a>
+        <a href="https://github.com/jsobando96" target="_blank"><button class="btn-secondary" style="min-width:160px;color:var(--white);border-color:var(--white);">GitHub</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+//  GLOBALS — exposed on window so inline onclick always finds them
+// ════════════════════════════════════════
+const pages = ['hero','about','projects','detail','contact'];
+let currentPage = 'hero';
+
+window.showPage = function(id) {
+  pages.forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.classList.remove('active');
+  });
+  const target = document.getElementById('page-' + id);
+  if (target) { target.classList.add('active'); currentPage = id; }
+  const nav = document.getElementById('main-nav');
+  if (nav) nav.classList.toggle('hidden', id === 'hero');
+  setTimeout(resizeAll, 50);
+  if (id === 'about') {
+    const p = document.getElementById('page-about');
+    if (p) { p.scrollTop = 0; setTimeout(() => initScrollReveal(p), 80); }
+  }
+  if (id === 'contact' && !scenes.contact) {
+    setTimeout(initContactScene, 60);
+  }
+};
+
+window.openProject = function(id) {
+  const projects = {
+    quirch: {
+      titleBar: 'Quirch Foods — WordPress Development for International Food Brand',
+      year: '2018',
+      title: 'Quirch Foods — WordPress Development for International Food Brand Websites',
+      subtitle: 'Multi-site support, responsive page development, usability improvements, SEO-conscious structure, and long-term WordPress maintenance.',
+      client: 'Quirch Foods', industry: 'Food & Consumer Brands', role: 'WordPress Developer', duration: '4 years',
+      services: ['WordPress Development','Maintenance','SEO Improvements','Responsive UI','Optimization'],
+      overview: 'Over a four-year period, I worked on multiple WordPress websites for Quirch Foods, a U.S.-based food company, supporting brand pages, website improvements, performance optimization, and ongoing maintenance across several digital properties.',
+      challenge: 'Quirch Foods needed visually strong, easy-to-manage brand websites that could support product communication, marketing content, and ongoing business updates across multiple properties.',
+      solution: 'I developed and maintained WordPress-based brand websites, creating responsive pages, implementing content updates, improving structure and usability, and optimizing selected properties for a better front-end experience.',
+      tech: ['WordPress','PHP','HTML5','CSS3','JavaScript','MySQL','ACF','RevSlider'],
+      why: 'This project demonstrates the ability to support international clients, manage multiple related web properties, and deliver WordPress solutions that balance branding, usability, maintenance, and marketing needs.',
+      bg: '#c0392b',
+      outcome: ['Delivered responsive, marketing-focused websites aligned with international food brand communication.','Improved usability and front-end clarity across multiple pages and properties.','Supported long-term reliability through continuous maintenance and updates.','Built pages designed to be easy to navigate, marketing-friendly, and SEO-conscious.'],
+      sites: [
+        { url:'https://mambofoods.com', name:'mambofoods.com', desc:'Branded WordPress pages focused on visual presentation and easy content navigation.' },
+        { url:'https://quirch.com/chiquita', name:'quirch.com/chiquita', desc:'Brand-specific pages aligned with product marketing and visual consistency.' },
+        { url:'https://panamei.com', name:'panamei.com', desc:'Structure, front-end presentation, and usability improvements.' },
+        { url:'https://quirchfoods.com', name:'quirchfoods.com', desc:"Ongoing updates and maintenance across the company's main digital presence." }
+      ],
+      roles: ['Built and updated WordPress pages for consumer-facing food brands','Supported responsive front-end development and visual refinement','Improved usability, navigation, and content presentation','Optimized selected pages for performance and SEO foundations','Provided long-term maintenance, updates, and fixes','Translated brand requirements into practical WordPress solutions'],
+      previews: [
+        { url:'https://www.quirchfoods.com', label:'quirchfoods.com' },
+        { url:'https://mambofoods.com', label:'mambofoods.com' },
+        { url:'https://quirch.com/chiquita', label:'quirch.com/chiquita' },
+        { url:'https://panamei.com', label:'panamei.com' }
+      ]
+    },
+    pilar: {
+      titleBar: 'Pilar Vélez — Metadata-Driven WordPress Publishing Ecosystem',
+      year: '2020',
+      title: 'Pilar Vélez — Metadata-Driven WordPress Publishing Ecosystem',
+      subtitle: 'Four connected literary websites built around custom fields, dynamic content structures, search systems, multilingual workflows, and long-term maintenance.',
+      client: 'Pilar Vélez', industry: 'Publishing & Literary Platforms', role: 'WordPress Developer', duration: '4 websites',
+      services: ['Custom Themes','ACF Content Systems','Search & Filtering','WPML','Maintenance'],
+      overview: 'I built and maintained a connected publishing ecosystem for writer Pilar Vélez, covering four literary websites: milibrohispano.org, snowfountainpress.com, pilarvelez.com, and poetasyescritoresmiami.com. The project focused on creating dynamic, metadata-driven WordPress platforms that made it easy for non-technical teams to manage books, authors, awards, and editorial content.',
+      challenge: 'The client needed multiple websites that could manage literary content in a scalable way, without requiring constant developer support for every new book, author profile, award entry, or editorial update.',
+      solution: 'I designed custom WordPress structures using metadata, custom fields, and tailored templates so that content could be entered once and displayed dynamically across the sites with consistent presentation and easier management.',
+      tech: ['WordPress','PHP','HTML5','CSS3','JavaScript','MySQL','ACF Pro','WP_Query','WPML'],
+      why: 'This project demonstrates the ability to design scalable content architecture, build editor-friendly WordPress systems, and support publishing workflows across multiple connected websites over the long term.',
+      bg: '#8b0000',
+      outcome: ['Delivered a scalable publishing ecosystem across four WordPress websites.','Made it easier for non-technical teams to manage complex literary content independently.','Improved discoverability through custom search, filtering, and structured metadata.','Created a maintainable long-term foundation for publishing and editorial growth.'],
+      sites: [
+        { url:'https://milibrohispano.org', name:'milibrohispano.org', desc:'A multilingual literary platform with dynamic content structures for books, authors, and related editorial content.' },
+        { url:'https://snowfountainpress.com', name:'snowfountainpress.com', desc:'Publishing-focused WordPress website designed to organize and present literary catalog content clearly.' },
+        { url:'https://pilarvelez.com', name:'pilarvelez.com', desc:'Personal author website with structured presentation for publications, recognition, and biography-related content.' },
+        { url:'https://poetasyescritoresmiami.com', name:'poetasyescritoresmiami.com', desc:'Literary community website supporting searchable and organized content for writers and publishing-related information.' }
+      ],
+      roles: ['Architected metadata-driven WordPress systems for books, authors, awards, and editorial content','Built custom themes and tailored templates for literary and publishing workflows','Developed search and filtering tools using WP_Query and custom taxonomies','Implemented multilingual functionality with WPML for bilingual content management','Created editor-friendly workflows so marketing and design teams could update the sites without code','Provided long-term maintenance, updates, and ongoing feature improvements'],
+      previews: [
+        { url:'https://milibrohispano.org', label:'milibrohispano.org' },
+        { url:'https://snowfountainpress.com', label:'snowfountainpress.com' },
+        { url:'https://pilarvelez.com', label:'pilarvelez.com' },
+        { url:'https://poetasyescritoresmiami.com', label:'poetasyescritoresmiami.com' }
+      ]
+    },
+    pharma: {
+      titleBar: 'Pharmabrand — Campaign Websites, Medical Code Platforms, and Contest Systems',
+      year: '2021',
+      title: 'Pharmabrand — Campaign Websites, Medical Code Platforms, and Contest Systems',
+      subtitle: 'A portfolio series of three campaign-focused case studies: high-speed pharmaceutical landing pages, a medical code redemption platform, and a photography contest system with registration and backend image management.',
+      client: 'Pharmabrand', industry: 'Pharmaceutical Marketing', role: 'WordPress Developer', duration: 'Multiple campaigns',
+      services: ['WordPress Development','PHP / MySQL','Custom Plugin','Dynamic Forms','Campaign Platforms','Contest Systems','RevSlider'],
+      overview: 'A portfolio series organized into three campaign-focused case studies: high-speed pharmaceutical landing pages, a medical code redemption platform, and a photography contest system with registration and backend image management.',
+      challenge: 'Pharmabrand needed multiple landing pages for different medications, each one designed to launch quickly, communicate product information clearly, and support marketing goals without sacrificing usability or mobile responsiveness.',
+      solution: 'I built a series of fast-turnaround WordPress landing pages using RevSlider and custom page structures, focusing on responsive execution, clear product communication, lightweight content flows, and pages that were easy to update and maintain.',
+      tech: ['WordPress','PHP','MySQL','HTML5','CSS3','JavaScript','RevSlider'],
+      why: 'This project demonstrates the ability to turn pharmaceutical campaign goals into fast, usable, and business-specific digital experiences that go beyond standard marketing pages.',
+      bg: '#6b7280',
+      outcome: [
+        'Delivered multiple medication-focused landing pages on short timelines.',
+        'Supported a campaign with 7,000+ code submissions and 2,000+ registered doctors via Guardianes de la Salud.',
+        'Created a more reliable code redemption process with automatic validation and deactivation.',
+        'Transformed a promotional photography contest into a structured digital workflow with backend image management.',
+        'Extended Pharmabrand\'s promotional web presence across three distinct campaign formats.'
+      ],
+      sites: [
+        { url:'https://luvis.ec', name:'luvis.ec', desc:'Fast-turnaround pharmaceutical landing page — medication promotion and SEO-conscious structure.' },
+        { url:'https://binmune.ec', name:'binmune.ec', desc:'Fast-turnaround pharmaceutical landing page — medication promotion and SEO-conscious structure.' },
+        { url:'https://nocol.ec', name:'nocol.ec', desc:'Fast-turnaround pharmaceutical landing page — medication promotion and SEO-conscious structure.' },
+        { url:'https://biofit.com.ec', name:'biofit.com.ec', desc:'Fast-turnaround pharmaceutical landing page — medication promotion and SEO-conscious structure.' },
+        { url:'https://guardianesdelasalud.ec', name:'guardianesdelasalud.ec', desc:'Medical code redemption platform — doctor registration, code validation, and representative association.' },
+        { url:'https://oftalmofoto.com', name:'oftalmofoto.com', desc:'Photography contest platform — participant registration and backend image submission management.' }
+      ],
+      roles: [
+        'Built fast-turnaround WordPress landing pages using RevSlider for pharmaceutical campaigns',
+        'Developed responsive marketing layouts for medication promotion across desktop and mobile',
+        'Created a custom PHP/MySQL code redemption system for Guardianes de la Salud',
+        'Implemented doctor registration linked to medical representatives and code activity',
+        'Built code validation and auto-deactivation logic to prevent repeated use',
+        'Developed a photography contest platform with registration and backend image organization'
+      ],
+      previews: [
+        { url:'https://luvis.ec', label:'luvis.ec' },
+        { url:'https://binmune.ec', label:'binmune.ec' },
+        { url:'https://nocol.ec', label:'nocol.ec' },
+        { url:'https://biofit.com.ec', label:'biofit.com.ec' },
+        { url:'https://guardianesdelasalud.ec', label:'guardianesdelasalud.ec' },
+        { url:'https://oftalmofoto.com', label:'oftalmofoto.com' }
+      ]
+    },
+    pukllay: {
+      titleBar: 'Pukllay — Custom WooCommerce Registration System for Sports Events',
+      year: '2022',
+      title: 'Pukllay — Custom WooCommerce Registration System for Sports Events',
+      subtitle: 'Dynamic multi-participant registration, conditional pricing, automated event setup, and a custom WordPress workflow designed for 25+ running and cycling events.',
+      client: 'Pukllay', industry: 'Sports Events', role: 'WordPress Developer', duration: '25+ events',
+      services: ['Custom Plugin','WooCommerce Logic','Dynamic Forms','Pricing Rules','Admin Workflows'],
+      overview: 'I developed a custom WordPress + WooCommerce registration system for Pukllay, a company that organizes running and cycling events. The goal was to replace a rigid, manual registration process with a flexible workflow that could handle multiple participants, optional add-ons, event bundles, and automated event publishing.',
+      challenge: 'Pukllay needed a registration flow that could support 1 to 5 participants, optional jerseys, discounts for joining multiple races, and an admin process that would not require rebuilding event pages manually every time.',
+      solution: 'I built a custom plugin integrated with WooCommerce, adding dynamic participant forms, pricing logic, and an editor-friendly event system where the business owner could enter race data once and generate the event setup automatically.',
+      tech: ['WordPress','WooCommerce','PHP','HTML5','CSS3','JavaScript','MySQL','ACF / Metaboxes'],
+      why: 'This project shows the ability to extend WooCommerce beyond standard product sales, build business-specific plugin logic, and design admin workflows that make complex event operations easier for non-technical users.',
+      bg: '#111',
+      outcome: ['Supported a registration workflow used across 25+ sports events.','Reduced manual event setup by giving the business owner a structured admin workflow.','Improved pricing flexibility for race bundles and optional products.','Created a more scalable registration system than a standard WooCommerce setup alone.'],
+      sites: [{ url:'https://pukllay.ec', name:'pukllay.ec', desc:'Main sports brand website — race registration, event management, and merchandise store.' }],
+      roles: ['Built a custom WordPress + WooCommerce plugin for race registration workflows','Created dynamic forms that expanded automatically for 1 to 5 participants','Implemented pricing logic for optional jerseys and multi-race discounts','Customized WooCommerce hooks and templates to support the full registration experience','Designed an admin-friendly event setup using custom fields and metaboxes','Improved operational efficiency by reducing manual event creation and pricing errors'],
+      previews: [
+        { url:'https://pukllay.ec', label:'pukllay.ec' }
+      ]
+    }
+  };
+
+  const p = projects[id];
+  if (!p) return;
+
+  // Topbar
+  document.getElementById('detail-title-bar').textContent = p.titleBar;
+  document.getElementById('detail-year-bar').textContent = p.year;
+
+  // Hero section
+  document.getElementById('cs-title').textContent = p.title;
+  document.getElementById('cs-subtitle').textContent = p.subtitle;
+  document.getElementById('cs-client').textContent = p.client;
+  document.getElementById('cs-industry').textContent = p.industry;
+  document.getElementById('cs-role').textContent = p.role;
+  document.getElementById('cs-duration').textContent = p.duration;
+  document.getElementById('cs-services').innerHTML = p.services.map(s =>
+    `<span style="border:1px solid #ccc;padding:7px 16px;font-size:.82rem;border-radius:2px;">${s}</span>`
+  ).join('');
+
+  // iframe + thumbnails
+  const iframe = document.getElementById('detail-iframe');
+  const iframeLoading = document.getElementById('iframe-loading');
+  const thumbsEl = document.getElementById('detail-thumbs');
+  const previews = p.previews || [];
+
+  function showIframeLoading() { iframeLoading.style.display = 'flex'; }
+  function hideIframeLoading() { iframeLoading.style.display = 'none'; }
+
+  iframe.addEventListener('load', function() {
+    if (iframe.src && iframe.src !== 'about:blank') hideIframeLoading();
+  });
+
+  if (previews.length) { showIframeLoading(); iframe.src = previews[0].url; }
+  thumbsEl.innerHTML = previews.map((pv, i) =>
+    `<div class="thumb${i===0?' active':''}" data-url="${pv.url}" style="width:140px;height:88px;flex-shrink:0;background:#222;border:2px solid ${i===0?'var(--gold)':'transparent'};display:flex;align-items:center;justify-content:center;color:${i===0?'var(--gold)':'#666'};font-size:.68rem;cursor:pointer;padding:6px;text-align:center;transition:border-color .2s,color .2s;word-break:break-all;">${pv.label}</div>`
+  ).join('');
+  thumbsEl.querySelectorAll('.thumb').forEach(function(th){
+    th.addEventListener('click', function(){
+      showIframeLoading();
+      iframe.src = th.dataset.url;
+      thumbsEl.querySelectorAll('.thumb').forEach(function(t){
+        t.style.borderColor = 'transparent';
+        t.style.color = '#666';
+      });
+      th.style.borderColor = 'var(--gold)';
+      th.style.color = 'var(--gold)';
+    });
+  });
+
+  // Overview
+  document.getElementById('cs-overview').textContent = p.overview;
+
+  // Challenge / Solution / Tech
+  document.getElementById('cs-challenge').textContent = p.challenge;
+  document.getElementById('cs-solution').textContent = p.solution;
+  document.getElementById('cs-tech').innerHTML = p.tech.map(t =>
+    `<span style="border:1px solid #555;padding:5px 12px;font-size:.8rem;border-radius:2px;">${t}</span>`
+  ).join('');
+  document.getElementById('cs-why').textContent = p.why;
+
+  // My Role grid
+  document.getElementById('cs-role-grid').innerHTML = p.roles.map(r =>
+    `<div style="background:var(--black);color:var(--white);padding:32px 36px;font-size:.92rem;line-height:1.6;">${r}</div>`
+  ).join('');
+
+  // Sites
+  document.getElementById('cs-sites').innerHTML = p.sites.map(s =>
+    `<a href="${s.url}" target="_blank" style="background:var(--black);color:var(--white);padding:36px 40px;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='var(--black)'">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:12px;">${s.name}</div>
+      <div style="font-size:.88rem;color:#aaa;line-height:1.7;">${s.desc}</div>
+    </a>`
+  ).join('');
+
+  // Outcome
+  document.getElementById('cs-outcome').innerHTML = p.outcome.map(o =>
+    `<div style="display:flex;gap:12px;margin-bottom:4px;"><span style="color:#888;flex-shrink:0;">—</span><span>${o}</span></div>`
+  ).join('');
+
+  window.showPage('detail');
+  // Scroll to top
+  const detailPage = document.getElementById('page-detail');
+  if (detailPage) detailPage.scrollTop = 0;
+};
+
+// ════════════════════════════════════════
+//  SCROLL REVEAL
+// ════════════════════════════════════════
+function initScrollReveal(container) {
+  if (!container) return;
+  const els = container.querySelectorAll('.scroll-reveal');
+  if (!els.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12, root: container });
+  els.forEach(el => obs.observe(el));
+}
+
+// ════════════════════════════════════════
+//  THREE.JS — Character Factory
+// ════════════════════════════════════════
+function buildCharacter(scene, scale) {
+  scale = scale || 1;
+  const g = new THREE.Group();
+  const skin=0xf0c090, cloth=0xe8b4c8, pants=0x222222, shoe=0xddddcc, beard=0x2a1a0a, hair=0x1a0f05;
+  const m = function(color){ return new THREE.MeshLambertMaterial({color:color}); };
+
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.38*scale,32,32), m(skin));
+  head.position.y=2.05*scale; head.scale.set(1,.95,1); g.add(head);
+
+  const hairM = new THREE.Mesh(new THREE.SphereGeometry(.39*scale,32,32,0,Math.PI*2,0,Math.PI/2.2), m(hair));
+  hairM.position.y=2.07*scale; g.add(hairM);
+
+  const beardM = new THREE.Mesh(new THREE.SphereGeometry(.29*scale,16,16,Math.PI*.25,Math.PI*1.5,Math.PI*.55,Math.PI*.5), m(beard));
+  beardM.position.set(0,1.78*scale,.1*scale); g.add(beardM);
+
+  [-1,1].forEach(function(side){
+    var eye = new THREE.Mesh(new THREE.SphereGeometry(.06*scale,16,16), m(0x111111));
+    eye.position.set(side*.13*scale,2.08*scale,.34*scale); g.add(eye);
+    var shine = new THREE.Mesh(new THREE.SphereGeometry(.025*scale,8,8), m(0xffffff));
+    shine.position.set(side*.13*scale+.02*scale,2.10*scale,.37*scale); g.add(shine);
+  });
+
+  var nose = new THREE.Mesh(new THREE.SphereGeometry(.055*scale,8,8), m(skin));
+  nose.position.set(0,1.97*scale,.38*scale); nose.scale.set(1,1.3,1.2); g.add(nose);
+
+  var neck = new THREE.Mesh(new THREE.CylinderGeometry(.13*scale,.15*scale,.22*scale,16), m(skin));
+  neck.position.y=1.72*scale; g.add(neck);
+
+  var torso = new THREE.Mesh(new THREE.CylinderGeometry(.38*scale,.35*scale,.7*scale,16), m(cloth));
+  torso.position.y=1.2*scale; g.add(torso);
+
+  var collar = new THREE.Mesh(new THREE.TorusGeometry(.22*scale,.06*scale,8,20), m(cloth));
+  collar.position.y=1.58*scale; collar.rotation.x=Math.PI/2; g.add(collar);
+
+  var pocket = new THREE.Mesh(new THREE.BoxGeometry(.28*scale,.15*scale,.05*scale), m(0xd8a0b5));
+  pocket.position.set(0,1.05*scale,.37*scale); g.add(pocket);
+
+  [-1,1].forEach(function(side){
+    var upper = new THREE.Mesh(new THREE.CylinderGeometry(.1*scale,.09*scale,.42*scale,12), m(cloth));
+    upper.position.set(side*.48*scale,1.25*scale,0); upper.rotation.z=side*.15; g.add(upper);
+    var lower = new THREE.Mesh(new THREE.CylinderGeometry(.09*scale,.08*scale,.36*scale,12), m(cloth));
+    lower.position.set(side*.54*scale,.9*scale,0); lower.rotation.z=side*.2; g.add(lower);
+    var hand = new THREE.Mesh(new THREE.SphereGeometry(.08*scale,12,12), m(skin));
+    hand.position.set(side*.60*scale,.72*scale,0); g.add(hand);
+  });
+
+  var pelvis = new THREE.Mesh(new THREE.CylinderGeometry(.34*scale,.3*scale,.18*scale,16), m(pants));
+  pelvis.position.y=.78*scale; g.add(pelvis);
+
+  [-1,1].forEach(function(side){
+    var thigh = new THREE.Mesh(new THREE.CylinderGeometry(.14*scale,.12*scale,.44*scale,12), m(pants));
+    thigh.position.set(side*.17*scale,.47*scale,0); g.add(thigh);
+    var shin = new THREE.Mesh(new THREE.CylinderGeometry(.12*scale,.10*scale,.4*scale,12), m(pants));
+    shin.position.set(side*.17*scale,.06*scale,0); g.add(shin);
+    var shoeM = new THREE.Mesh(new THREE.BoxGeometry(.18*scale,.1*scale,.28*scale), m(shoe));
+    shoeM.position.set(side*.17*scale,-.17*scale,.04*scale); g.add(shoeM);
+  });
+  return g;
+}
+
+function makeScene(canvas) {
+  if (!canvas) return null;
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(window.devicePixelRatio);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50,1,.1,100);
+  scene.add(new THREE.AmbientLight(0xffffff,.8));
+  var dir = new THREE.DirectionalLight(0xffffff,1.2); dir.position.set(3,6,4); scene.add(dir);
+  var fill = new THREE.DirectionalLight(0xaaccff,.4); fill.position.set(-3,2,-2); scene.add(fill);
+  return {renderer:renderer, scene:scene, camera:camera};
+}
+
+var scenes={}, chars={}, mixers={};
+
+function resizeScene(s,canvas){
+  var w=canvas.clientWidth, h=canvas.clientHeight;
+  if(!w||!h) return;
+  s.renderer.setSize(w,h,false);
+  s.camera.aspect=w/h;
+  s.camera.updateProjectionMatrix();
+}
+
+function resizeAll(){
+  ['hero','about','projects','detail','outcome','contact'].forEach(function(k){
+    var canvas=document.getElementById(k+'-canvas');
+    if(canvas&&scenes[k]) resizeScene(scenes[k],canvas);
+  });
+}
+
+function initHeroScene(){
+  var canvas=document.getElementById('hero-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,1.5,5.5); s.camera.lookAt(0,1.2,0);
+  scenes.hero=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.03);
+    fbx.rotation.y=-.3;
+    fbx.position.set(-.4,-.6,0);
+    s.scene.add(fbx);
+    chars.hero=fbx;
+    if(fbx.animations && fbx.animations.length){
+      var mixer=new THREE.AnimationMixer(fbx);
+      var idleAction=mixer.clipAction(fbx.animations[0]);
+      idleAction.setLoop(THREE.LoopRepeat, Infinity);
+      idleAction.play();
+      mixers.hero=mixer;
+      var waveLoader=new THREE.FBXLoader();
+      waveLoader.load('Models/Wave.fbx', function(waveFbx){
+        var waveClip=waveFbx.animations[0];
+        // Strip any "ObjectName|" prefix Mixamo adds in separate animation FBX files
+        waveClip.tracks.forEach(function(track){
+          track.name=track.name.replace(/^[^|]+\|/,'');
+        });
+        console.log('[Wave] first track:', waveClip.tracks[0] && waveClip.tracks[0].name);
+        var waveAction=mixer.clipAction(waveClip);
+        waveAction.setLoop(THREE.LoopRepeat, Infinity);
+        var heroNameEl=document.querySelector('.hero-name');
+        if(heroNameEl){
+          heroNameEl.addEventListener('mouseenter',function(){
+            idleAction.fadeOut(0.3);
+            waveAction.reset().fadeIn(0.3).play();
+          });
+          heroNameEl.addEventListener('mouseleave',function(){
+            waveAction.fadeOut(0.3);
+            idleAction.reset().fadeIn(0.3).play();
+          });
+        }
+      });
+    }
+    console.log('[Hero] FBX loaded OK');
+  }, function(xhr){
+    console.log('[Hero] FBX loading: '+(xhr.loaded/xhr.total*100|0)+'%');
+  }, function(err){
+    console.error('[Hero] FBX load error:', err);
+  });
+}
+function initAboutScene(){
+  var canvas=document.getElementById('about-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,1.5,4.5); s.camera.lookAt(0,1.4,0);
+  scenes.about=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.04
+      
+    );
+    fbx.rotation.y=.1;
+    fbx.position.set(0,-.6,0);
+    s.scene.add(fbx);
+    chars.about=fbx;
+    if(!fbx.animations||!fbx.animations.length) return;
+    var mixer=new THREE.AnimationMixer(fbx);
+    var idleAction=mixer.clipAction(fbx.animations[0]);
+    idleAction.setLoop(THREE.LoopRepeat,Infinity);
+    idleAction.play();
+    mixers.about=mixer;
+    var tauntLoader=new THREE.FBXLoader();
+    tauntLoader.load('Models/Taunt.fbx', function(tauntFbx){
+      var tauntClip=tauntFbx.animations[0];
+      tauntClip.tracks.forEach(function(track){
+        track.name=track.name.replace(/^[^|]+\|/,'');
+      });
+      var tauntAction=mixer.clipAction(tauntClip);
+      tauntAction.setLoop(THREE.LoopRepeat,Infinity);
+      var aboutPage=document.getElementById('page-about');
+      if(aboutPage){
+        new IntersectionObserver(function(entries){
+          if(entries[0].isIntersecting){
+            idleAction.fadeOut(0.5);
+            tauntAction.reset().fadeIn(0.5).play();
+          } else {
+            tauntAction.fadeOut(0.5);
+            idleAction.reset().fadeIn(0.5).play();
+          }
+        },{threshold:0.3}).observe(aboutPage);
+      }
+    });
+  });
+}
+function initProjectsScene(){
+  var canvas=document.getElementById('projects-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,7,9); s.camera.lookAt(0,7,0);
+  scenes.projects=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.1);
+    fbx.rotation.y=0;
+    fbx.position.set(0,0,-2);
+    s.scene.add(fbx);
+    chars.projects=fbx;
+    if(!fbx.animations||!fbx.animations.length) return;
+    var mixer=new THREE.AnimationMixer(fbx);
+    var idleAction=mixer.clipAction(fbx.animations[0]);
+    idleAction.setLoop(THREE.LoopRepeat,Infinity);
+    idleAction.play();
+    mixers.projects=mixer;
+    var cardAnims=[
+      {id:'quirch', file:'Models/Chicken.fbx'},
+      {id:'pilar',  file:'Models/Writing.fbx'},
+      {id:'pharma', file:'Models/Salute.fbx'},
+      {id:'pukllay',file:'Models/Running.fbx'}
+    ];
+    var projectActions={};
+    cardAnims.forEach(function(item){
+      var al=new THREE.FBXLoader();
+      al.load(item.file, function(animFbx){
+        var clip=animFbx.animations[0];
+        clip.tracks.forEach(function(track){
+          track.name=track.name.replace(/^[^|]+\|/,'');
+        });
+        var action=mixer.clipAction(clip);
+        action.setLoop(THREE.LoopRepeat,Infinity);
+        projectActions[item.id]=action;
+        var card=document.querySelector('.project-card[data-id="'+item.id+'"]');
+        if(card){
+          card.addEventListener('mouseenter',function(){
+            idleAction.fadeOut(0.3);
+            action.reset().fadeIn(0.3).play();
+          });
+          card.addEventListener('mouseleave',function(){
+            action.fadeOut(0.3);
+            idleAction.reset().fadeIn(0.3).play();
+          });
+        }
+      });
+    });
+  });
+}
+function initOutcomeScene(){
+  var canvas=document.getElementById('outcome-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,1,3.5); s.camera.lookAt(0,0,0);
+  scenes.outcome=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.03);
+    fbx.rotation.y=-.3;
+    fbx.position.set(0,0,0);
+    s.scene.add(fbx);
+    chars.outcome=fbx;
+    var sitLoader=new THREE.FBXLoader();
+    sitLoader.load('Models/Sitting.fbx', function(sitFbx){
+      var clip=sitFbx.animations[0];
+      clip.tracks.forEach(function(track){
+        track.name=track.name.replace(/^[^|]+\|/,'');
+      });
+      var mixer=new THREE.AnimationMixer(fbx);
+      var action=mixer.clipAction(clip);
+      action.setLoop(THREE.LoopRepeat,Infinity);
+      action.play();
+      mixers.outcome=mixer;
+    });
+  });
+}
+function initDetailScene(){
+  var canvas=document.getElementById('detail-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,1,3.5); s.camera.lookAt(0,.9,0);
+  scenes.detail=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.03);
+    fbx.rotation.y=.4;
+    fbx.position.set(0,-.5,0);
+    s.scene.add(fbx);
+    chars.detail=fbx;
+    if(!fbx.animations||!fbx.animations.length) return;
+    var mixer=new THREE.AnimationMixer(fbx);
+    mixers.detail=mixer;
+    var talkLoader=new THREE.FBXLoader();
+    talkLoader.load('Models/Talking.fbx', function(talkFbx){
+      var clip=talkFbx.animations[0];
+      clip.tracks.forEach(function(track){
+        track.name=track.name.replace(/^[^|]+\|/,'');
+      });
+      var action=mixer.clipAction(clip);
+      action.setLoop(THREE.LoopRepeat,Infinity);
+      action.play();
+    });
+  });
+}
+
+function initContactScene(){
+  var canvas=document.getElementById('contact-canvas'); if(!canvas) return;
+  var s=makeScene(canvas); if(!s) return;
+  s.camera.position.set(0,1.7,5); s.camera.lookAt(0,1.2,0);
+  scenes.contact=s; resizeScene(s,canvas);
+  var loader=new THREE.FBXLoader();
+  loader.load('Models/Hero.fbx', function(fbx){
+    fbx.scale.setScalar(0.035);
+    fbx.rotation.y=-.3;
+    fbx.position.set(0,0,0);
+    s.scene.add(fbx);
+    chars.contact=fbx;
+    var textLoader=new THREE.FBXLoader();
+    textLoader.load('Models/Texting.fbx', function(textFbx){
+      var clip=textFbx.animations[0];
+      clip.tracks.forEach(function(track){
+        track.name=track.name.replace(/^[^|]+\|/,'');
+      });
+      var mixer=new THREE.AnimationMixer(fbx);
+      var action=mixer.clipAction(clip);
+      action.setLoop(THREE.LoopRepeat,Infinity);
+      action.play();
+      mixers.contact=mixer;
+    });
+  });
+}
+
+var t=0, clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  var delta=clock.getDelta();
+  t+=.016;
+  Object.keys(mixers).forEach(function(k){ mixers[k].update(delta); });
+  Object.keys(scenes).forEach(function(k){
+    var s=scenes[k], char=chars[k]; if(!char) return;
+    var baseY = k==='projects' ? -.9 : k==='detail' ? -.5 : -.6;
+    if(!mixers[k]){
+      char.position.y = baseY + Math.sin(t*1.2)*.04;
+      char.rotation.y += Math.sin(t*.5)*.008;
+    }
+    s.renderer.render(s.scene,s.camera);
+  });
+}
+
+window.addEventListener('load', function(){
+  initHeroScene();
+  setTimeout(initAboutScene,100);
+  setTimeout(initProjectsScene,100);
+  setTimeout(initDetailScene,100);
+  setTimeout(initOutcomeScene,100);
+  animate();
+});
+window.addEventListener('resize', resizeAll);
+</script>
+</body>
+</html>
