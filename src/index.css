@@ -1,0 +1,125 @@
+:root {
+  --dark-blue: #0a1e3f;
+  --dark-green: #0a3d2e;
+  --accent-blue: #2173C5;
+  --accent-green: #66CC33;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --blur: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+@font-face {
+  font-family: 'AlimamaShuHeiTi-Bold';
+  src: url('https://assets-persist.lovart.ai/agent-static-assets/AlimamaShuHeiTi-Bold.otf');
+}
+
+body {
+  background-color: #050f1f;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-green), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-primary {
+  padding: 18px 40px;
+  border-radius: 40px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 204, 51, 0.3);
+}
+
+.btn-outline {
+  padding: 18px 40px;
+  border-radius: 40px;
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+/* Sections Utilities */
+.section {
+  padding: 120px 5%;
+  position: relative;
+  min-height: 100vh;
+}
+
+.section-tag {
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-right: -2px;
+  /* Compensate for the extra trailing letter-space to center visually */
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.section-title {
+  font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
+  font-size: clamp(40px, 5vw, 56px);
+  margin-bottom: 24px;
+}
+
+.main-content {
+  padding-top: 80px;
+  min-height: 100vh;
+}

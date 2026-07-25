@@ -1,0 +1,546 @@
+/* ═══════════════════════════════════════════════
+   JOSÉ OBANDO PORTFOLIO — MOBILE RESPONSIVE STYLES
+   ═══════════════════════════════════════════════ */
+
+/* ── Hide mobile-only elements on DESKTOP ── */
+.mobile-nav {
+    display: none;
+}
+
+
+/* ─── TABLET (≤ 1024px) ──────────────────────── */
+@media (max-width: 1024px) {
+
+    .hero {
+        flex-direction: column !important;
+        padding-top: 120px !important;
+        height: auto !important;
+        gap: 50px !important;
+        align-items: flex-start !important;
+        padding-left: 6% !important;
+        padding-right: 6% !important;
+    }
+
+    .hero-content {
+        width: 100% !important;
+        padding-right: 0 !important;
+    }
+
+    .hero-visual {
+        width: 100% !important;
+        min-height: 350px;
+    }
+
+    h1 {
+        font-size: 44px;
+    }
+
+    .float-card {
+        transform: scale(0.8);
+    }
+
+    .section {
+        padding: 60px 5%;
+    }
+
+    .grid-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-wrapper {
+        padding: 40px 30px !important;
+        gap: 40px !important;
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+/* ─── MOBILE (≤ 768px) ───────────────────────── */
+@media (max-width: 768px) {
+
+    .main-content {
+        padding-top: 100px !important;
+    }
+
+    /* ── HEADER ── */
+    nav {
+        padding: 18px 20px !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        border-radius: 0 !important;
+        transform: none !important;
+        justify-content: center !important;
+        align-items: center !important;
+        overflow: visible !important;
+        background: rgba(5, 15, 31, 0.75) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: none !important;
+    }
+
+    nav.scrolled {
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        border-radius: 0 !important;
+        padding: 12px 20px !important;
+        overflow: visible !important;
+        background: rgba(5, 15, 31, 0.96) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    /* Personal brand logo centered */
+    .logo {
+        height: auto !important;
+        justify-content: center !important;
+    }
+
+    .logo-mark {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 17px !important;
+    }
+
+    .logo-text {
+        font-size: 16px !important;
+    }
+
+    .logo-text small {
+        font-size: 10px !important;
+    }
+
+    /* Hide desktop nav + CTA */
+    .nav-links {
+        display: none !important;
+    }
+
+    .nav-cta {
+        display: none !important;
+    }
+
+    /* ── MOBILE BOTTOM TAB BAR ── */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 24px;
+        /* Float above the bottom */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        /* Floating width */
+        max-width: 480px;
+        background: rgba(5, 15, 31, 0.6) !important;
+        /* more translucent */
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        /* Highly rounded corners */
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        z-index: 1000;
+        /* above overlay */
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        /* Deep shadow for float effect */
+    }
+
+    /* ── PROJECTS SUB-MENU ── */
+    .services-submenu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 110px;
+        /* position above float nav */
+        background: rgba(0, 0, 0, 0.1);
+        /* very subtle dimming */
+    }
+
+    .services-submenu {
+        background: rgba(7, 20, 45, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 10px;
+        width: 240px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .submenu-item {
+        background: transparent;
+        border: none;
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        width: 100%;
+        transition: background 0.2s ease;
+    }
+
+    .submenu-item:active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .submenu-item i {
+        font-size: 18px;
+        color: var(--accent-blue);
+    }
+
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 10px;
+        border: none;
+        background: transparent;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-item i {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .mobile-nav-item.active {
+        color: #fff;
+    }
+
+    .mobile-nav-item.active i {
+        color: var(--accent-green);
+    }
+
+    /* ── HERO ── */
+    h1 {
+        font-size: clamp(28px, 8.5vw, 42px) !important;
+        line-height: 1.15 !important;
+    }
+
+    .hero {
+        flex-direction: column !important;
+        padding: 0 5% 20px !important;
+        margin-top: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
+        gap: 32px !important;
+        align-items: flex-start !important;
+    }
+
+    .hero-content {
+        width: 100% !important;
+        padding-right: 0 !important;
+    }
+
+    .hero-visual {
+        width: 100% !important;
+        height: 260px !important;
+        min-height: unset !important;
+    }
+
+    .hero-portrait {
+        width: 210px !important;
+        height: 210px !important;
+        margin: 0 auto !important;
+    }
+
+    .about-portrait {
+        margin: 0 auto 24px auto !important;
+        max-width: 260px !important;
+    }
+
+    .hero-desc {
+        font-size: 15px !important;
+        margin-bottom: 28px !important;
+        max-width: 100% !important;
+    }
+
+    /* Float cards hidden on mobile to prevent overflow */
+    .float-card {
+        display: none !important;
+    }
+
+    .cta-group {
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        width: 100% !important;
+        justify-content: center !important;
+        font-size: 16px !important;
+        padding: 14px 24px !important;
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+        padding: 20px !important;
+    }
+
+    .stat-num {
+        font-size: 28px !important;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+        padding: 48px 5% max(90px, calc(env(safe-area-inset-bottom) + 90px)) !important;
+        min-height: auto !important;
+    }
+
+    .section-header {
+        margin-bottom: 32px !important;
+    }
+
+    .section-title {
+        font-size: clamp(24px, 7.5vw, 38px) !important;
+        line-height: 1.2 !important;
+    }
+
+    .section-desc {
+        font-size: 15px !important;
+    }
+
+    /* ── BENTO BOX GRID COLLAPSE ── */
+    div[style*="repeat(12, 1fr)"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+
+    .glass-card {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+    }
+
+    /* ── GRID CARDS ── */
+    .grid-cards {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .service-card {
+        padding: 20px !important;
+    }
+
+    /* ── TIMELINE: left-rail instead of center line ── */
+    .timeline::before {
+        left: 20px !important;
+        transform: none !important;
+    }
+
+    .timeline {
+        padding-left: 0 !important;
+    }
+
+    .timeline-item {
+        flex-direction: column !important;
+        gap: 0 !important;
+        margin-bottom: 60px !important;
+        padding-left: 44px !important;
+        /* rail (20px) + gap (24px) */
+        position: relative;
+    }
+
+    .timeline-item:nth-child(even) {
+        flex-direction: column !important;
+    }
+
+    .timeline-visual {
+        order: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 220px !important;
+        border-radius: 16px !important;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+        /* above the absolute ::before line */
+    }
+
+    .timeline-visual img {
+        height: 220px !important;
+        border-radius: 16px !important;
+        object-fit: cover;
+    }
+
+    .timeline-content {
+        order: 1;
+        max-width: 100% !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    .timeline-marker {
+        left: 20px !important;
+        top: 12px !important;
+        transform: translateX(-50%) !important;
+    }
+
+    .t-title {
+        font-size: clamp(20px, 5.5vw, 26px) !important;
+    }
+
+    /* ── CTA BOX ── */
+    .cta-section {
+        padding: 60px 20px !important;
+    }
+
+    .cta-box {
+        padding: 28px 16px !important;
+    }
+
+    .cta-box h2 {
+        font-size: clamp(22px, 6.5vw, 34px) !important;
+    }
+
+    .input-group {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .input-group input,
+    .input-group button {
+        width: 100% !important;
+        border-radius: 12px !important;
+    }
+
+    /* ── GLASS PANELS ── */
+    .glass-panel {
+        padding: 18px !important;
+    }
+
+    /* ── CONTACT ── */
+    .contact-wrapper {
+        padding: 20px 14px !important;
+        gap: 20px !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ── CASE STUDY ── */
+    .facts-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 14px !important;
+    }
+
+    .cs-preview iframe {
+        height: 60vw !important;
+        min-height: 240px !important;
+    }
+
+    .cs-thumbs {
+        padding: 12px !important;
+    }
+
+    /* ── FOOTER: reorganized compact layout ── */
+    footer {
+        padding: 30px 20px 140px !important;
+        /* Massive bottom padding to clear floating nav */
+    }
+
+    .footer-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        /* 2 columns */
+        gap: 20px !important;
+    }
+
+    /* Brand col spans both columns on top */
+    .footer-grid .footer-col:first-child {
+        grid-column: 1 / -1;
+        text-align: center;
+        align-items: center !important;
+    }
+
+    .footer-logo {
+        margin: 0 auto 12px auto !important;
+    }
+
+    .footer-desc {
+        font-size: 13px !important;
+        line-height: 1.6;
+        max-width: 280px;
+        margin: 0 auto !important;
+    }
+
+    /* Compact link items */
+    .footer-links li {
+        margin-bottom: 8px !important;
+    }
+
+    .footer-links a {
+        font-size: 14px !important;
+    }
+
+    .copyright {
+        padding-top: 15px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-col h4 {
+        font-size: 13px !important;
+        margin-bottom: 12px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* ── BIG HEADLINE TEXT ── */
+    h1,
+    h2.section-title {
+        word-break: break-word;
+    }
+}
+
+
+/* ─── SMALL PHONE (≤ 390px) ─────────────────── */
+@media (max-width: 390px) {
+    h1 {
+        font-size: 24px !important;
+    }
+
+    .section {
+        padding: 36px 4% max(90px, calc(env(safe-area-inset-bottom) + 90px)) !important;
+    }
+
+    .stats-strip {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .mobile-nav-item {
+        padding: 4px 8px;
+        font-size: 9px;
+    }
+
+    .mobile-nav-item i {
+        font-size: 20px;
+    }
+}

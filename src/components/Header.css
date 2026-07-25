@@ -1,0 +1,238 @@
+nav {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    padding: 30px 8%;
+    border-radius: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border: 1px solid transparent;
+    box-shadow: none;
+    transition: all 0.25s ease-out;
+}
+
+nav.scrolled {
+    top: 20px;
+    width: 90%;
+    max-width: 1100px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    background: rgba(15, 23, 35, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Personal brand logo ---- */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    height: 60px;
+    transition: height 0.25s ease-out;
+}
+
+nav.scrolled .logo {
+    height: 45px;
+}
+
+.logo-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 24px rgba(33, 115, 197, 0.35);
+    flex-shrink: 0;
+    transition: all 0.25s ease-out;
+}
+
+nav.scrolled .logo-mark {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+    border-radius: 11px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.logo-text small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 48px;
+}
+
+.nav-links a,
+.nav-dropdown-trigger {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    position: relative;
+    font-family: inherit;
+    /* Ensure button uses same font */
+}
+
+.nav-links a:hover,
+.nav-links a.active,
+.nav-dropdown-trigger:hover,
+.nav-dropdown-trigger.active {
+    color: #fff;
+}
+
+.nav-links a::after,
+.nav-dropdown-trigger::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after,
+.nav-dropdown-trigger:hover::after,
+.nav-dropdown-trigger.active::after {
+    width: 100%;
+}
+
+.nav-cta {
+    padding: 10px 24px;
+    border-radius: 30px;
+    background: #ffffff;
+    color: #000000;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #ffffff;
+    transition: all 0.3s ease;
+}
+
+.nav-cta:hover {
+    background: transparent;
+    border-color: #ffffff;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* ---- Projects Dropdown ---- */
+.nav-dropdown-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nav-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: rgba(10, 18, 32, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    padding: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 200;
+}
+
+.nav-dropdown-wrapper:hover .nav-dropdown,
+.nav-dropdown-wrapper.click-open .nav-dropdown {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Small triangle pointer */
+.nav-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Transparent bridge to prevent gap between trigger and dropdown */
+.nav-dropdown-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: transparent;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+}
+
+/* Override the underline animation for dropdown items */
+.dropdown-item::after {
+    display: none !important;
+}
+
+.dropdown-item i {
+    font-size: 18px;
+    color: var(--accent-green);
+    width: 20px;
+    text-align: center;
+}
